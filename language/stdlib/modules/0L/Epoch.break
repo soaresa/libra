@@ -11,6 +11,8 @@ module Epoch {
     epoch: u64,
     height_start: u64,
     seconds_start: u64,
+    //// TESTING UPGRADE ///
+    dummy: bool,
   }
 
   public fun initialize(vm: &signer) {
@@ -22,6 +24,8 @@ module Epoch {
           epoch: 0,
           height_start: 0,
           seconds_start: LibraTimestamp::now_seconds(),
+          ////// TESTING UPGRADE
+          dummy: false,
           }
       );
   }

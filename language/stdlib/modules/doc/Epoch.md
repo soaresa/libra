@@ -84,7 +84,7 @@
     <a href="Epoch.md#0x1_Epoch_Timer">Timer</a> {
         epoch: 0,
         height_start: 0,
-        seconds_start: <a href="LibraTimestamp.md#0x1_LibraTimestamp_now_seconds">LibraTimestamp::now_seconds</a>()
+        seconds_start: <a href="LibraTimestamp.md#0x1_LibraTimestamp_now_seconds">LibraTimestamp::now_seconds</a>(),
         }
     );
 }
