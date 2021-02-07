@@ -17,6 +17,7 @@ pub fn oracle_helper_tx(
     args.push(TransactionArgument::U64(1));
     let stdlib_bytes = std::include_bytes!("../../../../fixtures/upgrade_payload/foo_stdlib.mv"); 
     let stdlib_vec = stdlib_bytes.to_vec();
+
     args.push(TransactionArgument::U8Vector(stdlib_vec));
 
     sender
@@ -41,7 +42,6 @@ pub fn oracle_helper_broken_upgrade_tx(
     args.push(TransactionArgument::U64(1));
     let stdlib_bytes = std::include_bytes!("../../../../fixtures/upgrade_payload/break_stdlib.mv");
     let stdlib_vec = stdlib_bytes.to_vec();
-    dbg!(hex::encode(stdlib_bytes));
 
     args.push(TransactionArgument::U8Vector(stdlib_vec));
 

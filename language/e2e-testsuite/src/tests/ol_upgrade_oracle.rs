@@ -180,7 +180,7 @@ fn test_foo (sender: &Account, executor: &mut FakeExecutor, should_pass: bool) {
   executor.new_custom_block(2);
   
   let output = &executor.execute_transaction(txn);
-  dbg!(output);
+  // dbg!(output);
   if should_pass {
       assert_eq!(
           output.status().status(),
