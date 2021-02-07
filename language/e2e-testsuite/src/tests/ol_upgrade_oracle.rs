@@ -4,7 +4,7 @@
 use language_e2e_tests::{
   account::{Account, AccountData, AccountRoleSpecifier},
   executor::FakeExecutor,
-  oracle_setup::{oracle_helper_tx, upgrade_foo_tx},
+  oracle_setup::{oracle_helper_tx, upgrade_foo_tx, oracle_helper_broken_upgrade_tx},
 };
 use libra_types::{
   vm_status::KeptVMStatus,
@@ -180,6 +180,7 @@ fn test_foo (sender: &Account, executor: &mut FakeExecutor, should_pass: bool) {
   executor.new_custom_block(2);
   
   let output = &executor.execute_transaction(txn);
+  dbg!(output);
   if should_pass {
       assert_eq!(
           output.status().status(),
@@ -248,6 +249,55 @@ fn test_validators_oracle_tx() {
 
   executor.new_custom_block(2);
   let txn_2 = oracle_helper_tx(&accounts.get(2).unwrap(), 3);
+  let output = executor.execute_and_apply(txn_2);
+  assert_eq!(
+    output.status().status(),
+    Ok(KeptVMStatus::Executed)
+  );
+  
+
+  // verify that the foo transaction should fail
+  test_foo(&accounts.get(3).unwrap(), &mut executor, false);
+
+  // The creation of these blocks update the stdlib
+  executor.new_custom_block(2);
+  executor.new_custom_block(2);
+
+  // verify that the foo transaction should pass with the updated stdlib
+  test_foo(&accounts.get(4).unwrap(), &mut executor, true);
+
+  // Checks update doesn't happen again
+  executor.new_custom_block(2);
+}
+
+#[test]
+fn test_breaking_upgrade() {
+  let mut executor = FakeExecutor::from_genesis_file();
+
+  // create an association account and validator accounts
+  let libra_root = Account::new_libra_root();
+  let accounts = set_up_validators(&mut executor, libra_root);
+
+  executor.new_custom_block(2);
+
+  // Construct a valid and signed tx script.
+  let txn_0 = oracle_helper_broken_upgrade_tx(&accounts.get(0).unwrap(), 3);
+  let output = executor.execute_and_apply(txn_0);
+  assert_eq!(
+    output.status().status(),
+    Ok(KeptVMStatus::Executed)
+  );
+
+  executor.new_custom_block(2);
+  let txn_1 = oracle_helper_broken_upgrade_tx(&accounts.get(1).unwrap(), 3);
+  let output = executor.execute_and_apply(txn_1);
+  assert_eq!(
+    output.status().status(),
+    Ok(KeptVMStatus::Executed)
+  );
+
+  executor.new_custom_block(2);
+  let txn_2 = oracle_helper_broken_upgrade_tx(&accounts.get(2).unwrap(), 3);
   let output = executor.execute_and_apply(txn_2);
   assert_eq!(
     output.status().status(),
