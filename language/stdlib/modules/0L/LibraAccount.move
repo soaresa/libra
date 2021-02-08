@@ -206,7 +206,7 @@ module LibraAccount {
 
     resource struct Escrow <Token>{
         to_account: address,
-        escrow: Libra::T<Token>,
+        escrow: Libra::Libra<Token>,
     }
     resource struct AutopayEscrow <Token>{
         list: vector<Escrow<Token>>,
@@ -215,10 +215,16 @@ module LibraAccount {
     public fun new_autopay_escrow<Token>(
         sender: &signer,
         recipient: address,
-        coin: Libra::T<Token>,
-    ) acquires AutopayEscrow {
+        // coin: Libra::Libra<Token>,
+        amount: u64,
+    ) acquires AutopayEscrow, Balance {
         let account = Signer::address_of(sender);
-        if (!::exists<AutopayEscrow<Token>>(account)) {
+        
+        // let capa = extract_withdraw_capability(sender);
+        let account_balance = borrow_global_mut<Balance<Token>>(account);
+        let coin = Libra::withdraw<Token>(&mut account_balance.coin, amount);
+
+        if (!exists<AutopayEscrow<Token>>(account)) {
             move_to<AutopayEscrow<Token>>(sender, AutopayEscrow {
                 list: Vector::empty<Escrow<Token>>()
             })
@@ -231,6 +237,21 @@ module LibraAccount {
 
         let state = borrow_global_mut<AutopayEscrow<Token>>(account);
         Vector::push_back<Escrow<Token>>(&mut state.list, new_escrow);
+    }
+
+    public fun get_escrow(sender: &signer, recipient: address): u64 acquires AutopayEscrow {
+        let vec = borrow_global<AutopayEscrow<GAS>>(Signer::address_of(sender));
+        let len = Vector::length<Escrow<GAS>>(&vec.list);
+        let k = 0;
+        while (k < len) {
+            let el = Vector::borrow<Escrow<GAS>>(&vec.list, k);
+            if (el.to_account == recipient) {
+                return Libra::value<GAS>(&el.escrow)
+            };
+            k = k + 1;
+        };
+        0
+
     }
 
     /// Initialize this module. This is only callable from genesis.
@@ -247,10 +268,8 @@ module LibraAccount {
         );
     }
 
-    // //////// 0L ////////
+    //////// 0L ////////
     // Accounts can be created permissionlessly, but they need a VDF to be submitted with the request.
-
-        /////// 0L ////////
     public fun create_user_account_with_proof(
         challenge: &vector<u8>,
         solution: &vector<u8>,

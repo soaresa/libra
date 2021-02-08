@@ -24,7 +24,7 @@ module Libra {
         /// The value of this coin in the base units for `CoinType`
         value: u64
     }
-
+    
     /// The `MintCapability` resource defines a capability to allow minting
     /// of coins of `CoinType` currency by the holder of this capability.
     /// This capability is held only either by the `CoreAddresses::TREASURY_COMPLIANCE_ADDRESS()`
