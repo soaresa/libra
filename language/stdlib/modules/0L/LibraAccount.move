@@ -261,7 +261,7 @@ module LibraAccount {
             if (el.to_account == recipient) {
                 let recipient_coins = borrow_global_mut<Balance<GAS>>(recipient);
                 
-                let escrow_struct = Vector::swap_remove<Escrow<GAS>>(&mut vec.list, k);
+                let escrow_struct = Vector::remove<Escrow<GAS>>(&mut vec.list, k);
 
                 Libra::deposit<GAS>(&mut recipient_coins.coin, escrow_struct.escrow);
             };
