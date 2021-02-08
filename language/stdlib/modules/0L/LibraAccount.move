@@ -204,6 +204,35 @@ module LibraAccount {
     const PROLOGUE_EMODULE_NOT_ALLOWED: u64 = 1009;
     const PROLOGUE_INVALID_WRITESET_SENDER: u64 = 1010;
 
+    resource struct Escrow <Token>{
+        to_account: address,
+        escrow: Libra::T<Token>,
+    }
+    resource struct AutopayEscrow <Token>{
+        list: vector<Escrow<Token>>,
+    }
+    //////// 0L ////////
+    public fun new_autopay_escrow<Token>(
+        sender: &signer,
+        recipient: address,
+        coin: Libra::T<Token>,
+    ) acquires AutopayEscrow {
+        let account = Signer::address_of(sender);
+        if (!::exists<AutopayEscrow<Token>>(account)) {
+            move_to<AutopayEscrow<Token>>(sender, AutopayEscrow {
+                list: Vector::empty<Escrow<Token>>()
+            })
+        };
+        
+        let new_escrow = Escrow {
+            to_account: recipient,
+            escrow: coin,
+        };
+
+        let state = borrow_global_mut<AutopayEscrow<Token>>(account);
+        Vector::push_back<Escrow<Token>>(&mut state.list, new_escrow);
+    }
+
     /// Initialize this module. This is only callable from genesis.
     public fun initialize(
         lr_account: &signer,
