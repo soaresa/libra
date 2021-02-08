@@ -25,7 +25,9 @@ script {
       let new_bal = LibraAccount::balance<GAS>(account);
       assert(bal > new_bal, 7357001);
       print(&new_bal);
-      let escrowed = LibraAccount::get_escrow( sender, {{bob}});
+
+      let escrowed = LibraAccount::get_escrow_balance( sender, {{bob}});
+      assert(escrowed == (bal-new_bal), 7357002);
       print(&escrowed);
 
     }

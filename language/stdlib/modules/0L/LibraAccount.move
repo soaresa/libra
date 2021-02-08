@@ -219,10 +219,9 @@ module LibraAccount {
         amount: u64,
     ) acquires AutopayEscrow, Balance {
         let account = Signer::address_of(sender);
-        
-        // let capa = extract_withdraw_capability(sender);
-        let account_balance = borrow_global_mut<Balance<Token>>(account);
-        let coin = Libra::withdraw<Token>(&mut account_balance.coin, amount);
+        // Formal verification spec: should not get anyone else's balance struct
+        let balance_struct = borrow_global_mut<Balance<Token>>(account);
+        let coin = Libra::withdraw<Token>(&mut balance_struct.coin, amount);
 
         if (!exists<AutopayEscrow<Token>>(account)) {
             move_to<AutopayEscrow<Token>>(sender, AutopayEscrow {
@@ -239,7 +238,7 @@ module LibraAccount {
         Vector::push_back<Escrow<Token>>(&mut state.list, new_escrow);
     }
 
-    public fun get_escrow(sender: &signer, recipient: address): u64 acquires AutopayEscrow {
+    public fun get_escrow_balance(sender: &signer, recipient: address): u64 acquires AutopayEscrow {
         let vec = borrow_global<AutopayEscrow<GAS>>(Signer::address_of(sender));
         let len = Vector::length<Escrow<GAS>>(&vec.list);
         let k = 0;
@@ -251,7 +250,24 @@ module LibraAccount {
             k = k + 1;
         };
         0
+    }
 
+    public fun autopay_deduct(sender: &signer, recipient: address, amount: u64): u64 acquires AutopayEscrow, Balance {
+        let vec = borrow_global_mut<AutopayEscrow<GAS>>(Signer::address_of(sender));
+        let len = Vector::length<Escrow<GAS>>(&vec.list);
+        let k = 0;
+        while (k < len) {
+            let el = Vector::borrow<Escrow<GAS>>(&vec.list, k);
+            if (el.to_account == recipient) {
+                let recipient_coins = borrow_global_mut<Balance<GAS>>(recipient);
+                
+                let escrow_struct = Vector::swap_remove<Escrow<GAS>>(&mut vec.list, k);
+
+                Libra::deposit<GAS>(&mut recipient_coins.coin, escrow_struct.escrow);
+            };
+            k = k + 1;
+        };
+        0
     }
 
     /// Initialize this module. This is only callable from genesis.
