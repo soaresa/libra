@@ -37,13 +37,16 @@ script {
     use 0x123::BondingCurve;
     use 0x1::Debug::print;
 
-    fun main(_bob: &signer) {
-      let value = BondingCurve::bond_to_mint({{sponsor}}, 100000);
+    fun main(sender: &signer) {
+      let value = BondingCurve::bond_to_mint(sender, {{sponsor}}, 100000);
       print(&value);
       let (r, s) = BondingCurve::get_curve_state({{sponsor}});
+      let user_balance = BondingCurve::get_user_balance({{user}});
+      print(&user_balance);
       print(&r);
       print(&s);
 
+      assert(user_balance == 6000, 73570004);
       assert(r == 100100, 73570003);
       assert(s == 6200, 73570004);
 
