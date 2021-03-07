@@ -33,7 +33,7 @@ module BondingCurve {
 
     assert(reserve > 0, 7357001);
 
-    let supply = calc_supply_from_price(kappa, reserve, spot_price);
+    let supply = calc_init_supply_from_args(kappa, reserve, spot_price);
 
     let init_state = CurveState {
       is_deprecated: false, // deprecate mode
@@ -42,14 +42,19 @@ module BondingCurve {
       kappa: kappa
     };
 
-
     // This initializes the contract, and stores the contract state at the address of sender. TDB where the state gets stored.
     move_to<CurveState>(sponsor, init_state);
+
+    // TODO: Check the math works. Check rounding issues
+    // TODO: User should not have a benefit from rounding errors.
+    // let sponsor_addr = Signer::address_of(sponsor);
+    // assert(calc_spot_price_from_state(sponsor_addr) == spot_price, 73570002);
 
 
     let first_token = Token { 
       value: supply
     };
+
 
     // minting the first coin, sponsor is recipent of initial coin.
     move_to<Token>(sponsor, first_token);
@@ -65,14 +70,22 @@ module BondingCurve {
 
   }
 
-  fun calc_supply_from_price(kappa: u64, reserve_balance: u64, spot_price: u64): u64 {
+  // This is necessary on initializing.
+  fun calc_init_supply_from_args(kappa: u64, reserve_balance: u64, spot_price: u64): u64 {
     kappa * (reserve_balance/spot_price)
+  }
+
+  // This is a steady state getter
+  public fun calc_spot_price_from_state(sponsor_addr: address): u64 acquires CurveState {
+    let state = borrow_global_mut<CurveState>(sponsor_addr);
+    state.kappa * (state.reserve/state.supply)
   }
 
   fun calc_fee():u64 {
     1
   }
 
+  // Merges a token.
   fun deposit_token_to(sender: &signer, new_value: u64) acquires Token {
     let to_addr = Signer::address_of(sender);
     if (!exists<Token>(to_addr)) {
@@ -83,6 +96,7 @@ module BondingCurve {
     }
   }
 
+  // Splits a coin to be used.
   fun withdraw_token_from(sender: &signer, sub_value: u64) acquires Token {
     let from_addr = Signer::address_of(sender);
     assert(exists<Token>(from_addr), 73570005);
@@ -108,8 +122,18 @@ module BondingCurve {
     mint
   }
 
-  public fun burn_to_withdraw(_upgrade_token: u64):u64 {
-    1
+  public fun burn_to_withdraw(sender: &signer, sponsor_addr: address, burn_value: u64):u64 acquires CurveState, Token{
+    assert(exists<CurveState>(sponsor_addr), 73570002);
+    let state = borrow_global_mut<CurveState>(sponsor_addr);
+
+    // Calculate the reserve change.
+    let withdraw_value = state.reserve * (1-((1-(burn_value/state.supply))*(1-(burn_value/state.supply))));
+
+    withdraw_token_from(sender, burn_value);
+    // new curve state
+    state.reserve = state.reserve - withdraw_value;
+    state.supply = state.supply - burn_value;
+    withdraw_value
   }
 
 
@@ -141,6 +165,22 @@ module BondingCurve {
     };
     0
   }
+
+  ///////// TEST /////////
+
+  // NOTE:  This "invariant" may not be invariant with rounding issues.
+  public fun test_get_curve_invariant(sponsor_addr: address):u64 acquires CurveState {
+    let state = borrow_global_mut<CurveState>(sponsor_addr);
+
+    // TOOD: when we have native math lib the formula will be:
+    // (state.supply, to power of state.kappa) / state.reserve
+    if (state.kappa == 2 ) {
+      return (state.supply * state.supply) / state.reserve
+    };
+    0
+  }
+
+
 
 }
 }
