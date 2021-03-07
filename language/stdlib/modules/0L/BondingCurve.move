@@ -1,17 +1,17 @@
 address 0x123 {
 module BondingCurve {
   use 0x1::Signer;
-  // use 0x1::Debug::print;
+  use 0x1::FixedPoint32;
 
   resource struct CurveState {
     is_deprecated: bool,
-    reserve: u64,
-    supply: u64,
-    kappa: u64
+    reserve: FixedPoint32::FixedPoint32,
+    supply: FixedPoint32::FixedPoint32,
+    kappa: FixedPoint32::FixedPoint32
   }
 
   resource struct Token { 
-    value: u64
+    value: FixedPoint32::FixedPoint32
   }
 
   fun sunset() {
@@ -24,14 +24,14 @@ module BondingCurve {
   ///////// Initialization /////////
   public fun initialize_curve(
     sponsor: &signer,
-    reserve: u64,
-    spot_price: u64,
-    kappa: u64
+    reserve: FixedPoint32::FixedPoint32,
+    spot_price: FixedPoint32::FixedPoint32,
+    kappa: FixedPoint32::FixedPoint32
   ) {
     // TODO: Kappa will be overriden with `2` until math natives.
-    kappa = 2;
+    kappa = FixedPoint32::create_from_raw_value(2);
 
-    assert(reserve > 0, 7357001);
+    assert(reserve > FixedPoint32::create_from_raw_value(0), 7357001);
 
     let supply = calc_init_supply_from_args(kappa, reserve, spot_price);
 
@@ -61,8 +61,9 @@ module BondingCurve {
   }
 
   ///////// Calculations /////////
-  fun curve_kappa_two(add_to_reserve: u64, supply: u64, reserve: u64):u64 {
-    supply * sqrt(1+(add_to_reserve/reserve))
+  fun curve_kappa_two(add_to_reserve: FixedPoint32::FixedPoint32, supply: FixedPoint32::FixedPoint32, reserve: FixedPoint32::FixedPoint32):FixedPoint32::FixedPoint32 {
+    let one = FixedPoint32::create_from_raw_value(1);
+    supply * sqrt(one+(add_to_reserve/reserve))
   }
 
   /// TODO: distant future, generalized kappa. Need math natives.
@@ -71,22 +72,22 @@ module BondingCurve {
   }
 
   // This is necessary on initializing.
-  fun calc_init_supply_from_args(kappa: u64, reserve_balance: u64, spot_price: u64): u64 {
+  fun calc_init_supply_from_args(kappa: FixedPoint32::FixedPoint32, reserve_balance: FixedPoint32::FixedPoint32, spot_price: FixedPoint32::FixedPoint32): FixedPoint32::FixedPoint32 {
     kappa * (reserve_balance/spot_price)
   }
 
   // This is a steady state getter
-  public fun calc_spot_price_from_state(sponsor_addr: address): u64 acquires CurveState {
+  public fun calc_spot_price_from_state(sponsor_addr: address): FixedPoint32::FixedPoint32 acquires CurveState {
     let state = borrow_global_mut<CurveState>(sponsor_addr);
     state.kappa * (state.reserve/state.supply)
   }
 
-  fun calc_fee():u64 {
-    1
-  }
+  // fun calc_fee():FixedPoint32::FixedPoint32 {
+  //   1
+  // }
 
   // Merges a token.
-  fun deposit_token_to(sender: &signer, new_value: u64) acquires Token {
+  fun deposit_token_to(sender: &signer, new_value: FixedPoint32::FixedPoint32) acquires Token {
     let to_addr = Signer::address_of(sender);
     if (!exists<Token>(to_addr)) {
       move_to<Token>(sender, Token { value: new_value });
@@ -97,7 +98,7 @@ module BondingCurve {
   }
 
   // Splits a coin to be used.
-  fun withdraw_token_from(sender: &signer, sub_value: u64) acquires Token {
+  fun withdraw_token_from(sender: &signer, sub_value: FixedPoint32::FixedPoint32) acquires Token {
     let from_addr = Signer::address_of(sender);
     assert(exists<Token>(from_addr), 73570005);
     let user_token = borrow_global_mut<Token>(from_addr);
@@ -105,7 +106,7 @@ module BondingCurve {
   }
 
   ///////// API /////////
-  public fun bond_to_mint(sender: &signer, sponsor_addr: address, add_to_reserve: u64):u64 acquires CurveState, Token{
+  public fun bond_to_mint(sender: &signer, sponsor_addr: address, add_to_reserve: FixedPoint32::FixedPoint32):FixedPoint32::FixedPoint32 acquires CurveState, Token{
     assert(exists<CurveState>(sponsor_addr), 73570002);
     let state = borrow_global_mut<CurveState>(sponsor_addr);
 
@@ -122,7 +123,7 @@ module BondingCurve {
     mint
   }
 
-  public fun burn_to_withdraw(sender: &signer, sponsor_addr: address, burn_value: u64):u64 acquires CurveState, Token{
+  public fun burn_to_withdraw(sender: &signer, sponsor_addr: address, burn_value: FixedPoint32::FixedPoint32):FixedPoint32::FixedPoint32 acquires CurveState, Token{
     assert(exists<CurveState>(sponsor_addr), 73570002);
     let state = borrow_global_mut<CurveState>(sponsor_addr);
 
@@ -138,12 +139,12 @@ module BondingCurve {
 
 
   ///////// GETTERS /////////
-  public fun get_curve_state(sponsor_address: address): (u64, u64) acquires CurveState {
+  public fun get_curve_state(sponsor_address: address): (FixedPoint32::FixedPoint32, FixedPoint32::FixedPoint32) acquires CurveState {
     let state = borrow_global<CurveState>(sponsor_address);
     (state.reserve, state.supply)
   }
 
-  public fun get_user_balance(addr: address): u64 acquires Token {
+  public fun get_user_balance(addr: address): FixedPoint32::FixedPoint32 acquires Token {
     let state = borrow_global<Token>(addr);
     state.value
   }
@@ -151,33 +152,40 @@ module BondingCurve {
   ///////// MATH /////////
 
   //// !!!!! DANGER using while loop for square root for prototype !!!!! ////////
-  fun sqrt(y: u64): u64 {
-    if (y > 3) {
+  fun sqrt(y: FixedPoint32::FixedPoint32): FixedPoint32::FixedPoint32 {
+    let one = FixedPoint32::create_from_raw_value(1);
+    let two = FixedPoint32::create_from_raw_value(2);
+    let three = FixedPoint32::create_from_raw_value(3);
+    let zero = FixedPoint32::create_from_raw_value(0);
+
+    if (y > three) {
         let z = y;
-        let x = y / 2 + 1;
+        let x = y / two + one;
         while (x < z) {
             z = x;
-            x = (y / x + x) / 2;
+            x = (y / x + x) / two;
         };
         return x
-    } else if (y != 0) {
-        return 1
+    } else if (y != zero) {
+        return one
     };
-    0
+    zero
   }
 
   ///////// TEST /////////
 
   // NOTE:  This "invariant" may not be invariant with rounding issues.
-  public fun test_get_curve_invariant(sponsor_addr: address):u64 acquires CurveState {
+  public fun test_get_curve_invariant(sponsor_addr: address):FixedPoint32::FixedPoint32 acquires CurveState {
     let state = borrow_global_mut<CurveState>(sponsor_addr);
+    let two = FixedPoint32::create_from_raw_value(2);
+    let zero = FixedPoint32::create_from_raw_value(0);
 
     // TOOD: when we have native math lib the formula will be:
     // (state.supply, to power of state.kappa) / state.reserve
-    if (state.kappa == 2 ) {
+    if (state.kappa == two ) {
       return (state.supply * state.supply) / state.reserve
     };
-    0
+    zero
   }
 
 
