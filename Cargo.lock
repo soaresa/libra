@@ -4317,6 +4317,7 @@ dependencies = [
  "sha2 0.9.1",
  "vdf",
  "vm",
+ "zkp",
 ]
 
 [[package]]
@@ -7853,4 +7854,12 @@ dependencies = [
  "quote 1.0.7",
  "syn 1.0.42",
  "synstructure",
+]
+
+[[package]]
+name = "zkp"
+version = "0.1.0"
+source = "git+https://github.com/simsekgokhan/rustSTARK?branch=main#18a4f78a46a574c9ffbfe5de1aca65938982ea3e"
+dependencies = [
+ "cc",
 ]
