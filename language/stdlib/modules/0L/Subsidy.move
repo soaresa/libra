@@ -23,6 +23,7 @@ address 0x1 {
     use 0x1::TransactionFee;
     use 0x1::Roles;
     use 0x1::Testnet::is_testnet;
+    use 0x1::FullnodeState;
     // use 0x1::StagingNet::is_staging_net;    
     // Method to calculate subsidy split for an epoch.
     // This method should be used to get the units at the beginning of the epoch.
@@ -38,20 +39,17 @@ address 0x1 {
 
       // Get the split of payments from Stats.
       let len = Vector::length<address>(outgoing_set);
+      
+      // equal subsidy for all active validators
+      let subsidy_granted;
+      if (subsidy_units > len && subsidy_units > 0 ) { // arithmetic safety check
+        subsidy_granted = subsidy_units/len;
+      } else { return };
 
-      //TODO: assert the lengths of vectors are the same.
       let i = 0;
       while (i < len) {
 
         let node_address = *(Vector::borrow<address>(outgoing_set, i));
-        // let node_ratio = *(Vector::borrow<FixedPoint32>(fee_ratio, i));
-        
-        let subsidy_granted = 0;
-        if (subsidy_units > len) {
-          subsidy_granted = subsidy_units/len;
-        };
-        // should not be possible
-        if (subsidy_granted == 0) break;
         // Transfer gas from vm address to validator
         let minted_coins = Libra::mint<GAS>(vm_sig, subsidy_granted);
         LibraAccount::vm_deposit_with_metadata<GAS>(
@@ -137,14 +135,14 @@ address 0x1 {
 
         let node_address = *(Vector::borrow<address>(&genesis_validators, i));
         let old_validator_bal = LibraAccount::balance<GAS>(node_address);
-        let count_proofs = 1;
+        // let count_proofs = 1;
 
-        if (is_testnet()) {
-          // start with sufficient gas for expensive tests e.g. upgrade
-          count_proofs = 10;
-        };
+        // if (is_testnet()) {
+        //   // start with sufficient gas for expensive tests e.g. upgrade
+        //   count_proofs = 10;
+        // };
         
-        let subsidy_granted = distribute_fullnode_subsidy(vm_sig, node_address, count_proofs, true);
+        let subsidy_granted = distribute_onboarding_subsidy(vm_sig, node_address);
         //Confirm the calculations, and that the ending balance is incremented accordingly.
 
         assert(LibraAccount::balance<GAS>(node_address) == old_validator_bal + subsidy_granted, 19010105100);
@@ -221,28 +219,54 @@ address 0x1 {
         current_subsidy_distributed: 0u64,
         current_proofs_verified: 0u64,
       });
-      }
+    }
 
-    public fun distribute_fullnode_subsidy(vm: &signer, miner: address, count: u64, is_genesis: bool ):u64 acquires FullnodeSubsidy{
-      Roles::assert_libra_root(vm);
-      // only for fullnodes, ie. not in current validator set.
-      if (!is_genesis){
-        if (LibraSystem::is_validator(miner)) return 0;
-      };
+    public fun distribute_onboarding_subsidy(
+      vm: &signer,
+      miner: address
+    ):u64 acquires FullnodeSubsidy {
+      // Bootstrap gas if it's the first payment to a prospective validator. Check no fullnode payments have been made, and is in validator universe. 
+      CoreAddresses::assert_libra_root(vm);
+
+      FullnodeState::is_onboarding(miner);
+      
+      let state = borrow_global<FullnodeSubsidy>(CoreAddresses::LIBRA_ROOT_ADDRESS());
+
+      let subsidy = bootstrap_validator_balance();
+      if (state.current_proof_price > subsidy) subsidy = state.current_proof_price;
+
+      let minted_coins = Libra::mint<GAS>(vm, subsidy);
+      LibraAccount::vm_deposit_with_metadata<GAS>(
+        vm,
+        miner,
+        minted_coins,
+        b"onboarding_subsidy",
+        b""
+      );
+      subsidy
+    }
+
+
+    public fun distribute_fullnode_subsidy(vm: &signer, miner: address, count: u64):u64 acquires FullnodeSubsidy{
+      CoreAddresses::assert_libra_root(vm);
+      // Payment is only for fullnodes, ie. not in current validator set.
+      if (LibraSystem::is_validator(miner)) return 0;
+
       let state = borrow_global_mut<FullnodeSubsidy>(Signer::address_of(vm));
+      let subsidy;
+
       // fail fast, abort if ceiling was met
       if (state.current_subsidy_distributed > state.current_cap) return 0;
-      let proposed_subsidy = state.current_proof_price * count;
-      if (proposed_subsidy < 1) return 0;
 
-      let subsidy;
+      let proposed_subsidy = state.current_proof_price * count;
+
+      if (proposed_subsidy == 0) return 0;
       // check if payments will exceed ceiling.
       if (state.current_subsidy_distributed + proposed_subsidy > state.current_cap) {
         // pay the remainder only
         // TODO: This creates a race. Check ordering of list.
         subsidy = state.current_cap - state.current_subsidy_distributed;
       } else {
-
         // happy case, the ceiling is not met.
         subsidy = proposed_subsidy;
       };
@@ -254,8 +278,8 @@ address 0x1 {
         vm,
         miner,
         minted_coins,
-        x"",
-        x""
+        b"fullnode_subsidy",
+        b""
       );
 
       state.current_subsidy_distributed = state.current_subsidy_distributed + subsidy;
@@ -364,5 +388,33 @@ address 0x1 {
       if (fees < baseline_auction_units()) return baseline_auction_units();
       fees
     }
+
+    fun bootstrap_validator_balance():u64 {
+      let mins_per_day = 60 * 24;
+      let proofs_per_day = mins_per_day / 10; // 10 min proofs
+      let proof_cost = 4000; // assumes 1 microgas per gas unit 
+      let subsidy_value = proofs_per_day * proof_cost;
+      subsidy_value
+    }
+
+    //////// TEST HELPERS ///////
+    public fun test_set_fullnode_fixtures(
+      vm: &signer,
+      previous_epoch_proofs: u64,
+      current_proof_price: u64,
+      current_cap: u64,
+      current_subsidy_distributed: u64,
+      current_proofs_verified: u64,
+    ) acquires FullnodeSubsidy {
+      Roles::assert_libra_root(vm);
+      assert(is_testnet(), 1000);
+      let state = borrow_global_mut<FullnodeSubsidy>(0x0);
+      state.previous_epoch_proofs = previous_epoch_proofs;
+      state.current_proof_price = current_proof_price;
+      state.current_cap = current_cap;
+      state.current_subsidy_distributed = current_subsidy_distributed;
+      state.current_proofs_verified = current_proofs_verified;
+    }
+
 }
 }
