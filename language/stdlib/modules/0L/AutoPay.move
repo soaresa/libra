@@ -20,6 +20,21 @@ address 0x1{
 
     /// Attempted to send funds to an account that does not exist
     const EPAYEE_DOES_NOT_EXIST: u64 = 17;
+    /// Invalid payment type given
+    const INVALID_PAYMENT_TYPE: u64 = 18;
+
+    /// Maximum value for the Payment type selection
+    const MAX_TYPE: u8 = 3;
+
+    // types of Payments
+    /// send percent of balance at end of epoch payment type
+    const PERCENT_OF_BALANCE: u8 = 0;
+    /// send percent of the change in balance since the last tick payment type
+    const PERCENT_OF_CHANGE: u8 = 1;
+    /// send a certain amount each tick until end_epoch is reached payment type
+    const AMOUNT_UNTIL: u8 = 2;
+    /// send a certain amount once at the next tick payment type
+    const ONE_SHOT: u8 = 3;
 
     resource struct Tick {
       triggered: bool,
@@ -42,13 +57,20 @@ address 0x1{
 
     // This is the structure of each Payment struct which represents one automatic
     // payment held by an account
+    // Possible types:
+    // 0: amt% of current balance until end epoch
+    // 1: amt% of inflow until end_epoch 
+    // 2: amt gas until end_epoch
+    // 3: amt gas, one time payment
     struct Payment {
       // TODO: name should be a string to store a memo
       // name: u64,
       uid: u64,
+      type: u8,
       payee: address,
-      end_epoch: u64,  // end epoch is inclusive
-      percentage: u64,
+      end_epoch: u64,  // end epoch is inclusive, must just be higher than current epoch for type 3
+      prev_bal: u64, //only used for type 1
+      amt: u64, //percentage for types 0 & 1, count for 2 & 3
     }
 
     ///////////////////////////////
@@ -121,11 +143,40 @@ address 0x1{
           // If payment end epoch is greater, it's not an active payment anymore, so delete it
           if (payment.end_epoch >= epoch) {
             // A payment will happen now
-            // Obtain the amount to pay from percentage and balance
-            let amount = FixedPoint32::multiply_u64(account_bal , FixedPoint32::create_from_rational(payment.percentage, 100));
+            // Obtain the amount to pay 
+            let amount = if (payment.type == PERCENT_OF_BALANCE) {
+              FixedPoint32::multiply_u64(account_bal , FixedPoint32::create_from_rational(payment.amt, 100))
+            } else if (payment.type == PERCENT_OF_CHANGE) {
+              if (account_bal > payment.prev_bal) {
+                FixedPoint32::multiply_u64(account_bal - payment.prev_bal, FixedPoint32::create_from_rational(payment.amt, 100))
+              } else {
+                // if account balance hasn't gone up, no value is transferred
+                0
+              }
+            } else {
+              // in remaining cases, payment is simple amaount given, not a percentage
+              payment.amt
+            };
+            // update previous balance for next calculation
+            payment.prev_bal = account_bal;
+
             LibraAccount::make_payment<GAS>(*account_addr, payment.payee, amount, x"", x"", vm);
+
+            // if it's a one shot payment, delete it once it has done its job
+            if (payment.type == ONE_SHOT) {
+              Vector::remove<Payment>(payments, payments_idx);
+              // fix the indices
+              payments_len = payments_len - 1;
+              payments_idx = payments_idx - 1;
+            }
+            
+          } else {
+            // delete no longer active functions
+            Vector::remove<Payment>(payments, payments_idx);
+            // fix the indices
+            payments_len = payments_len - 1;
+            payments_idx = payments_idx - 1;
           };
-          // ToDo: might want to delete inactive instructions to save memory
           payments_idx = payments_idx + 1;
         };
         account_idx = account_idx + 1;
@@ -173,9 +224,10 @@ address 0x1{
     public fun create_instruction(
       sender: &signer, 
       uid: u64,
+      type: u8,
       payee: address,
       end_epoch: u64,
-      percentage: u64
+      amt: u64
     ) acquires Data {
       let addr = Signer::address_of(sender);
       // Confirm that no payment exists with the same uid
@@ -188,12 +240,18 @@ address 0x1{
 
       assert(LibraAccount::exists_at(payee), Errors::not_published(EPAYEE_DOES_NOT_EXIST));
 
+      assert(type <= MAX_TYPE, Errors::invalid_argument(INVALID_PAYMENT_TYPE));
+
+      let account_bal = LibraAccount::balance<GAS>(addr);
+
       Vector::push_back<Payment>(payments, Payment {
         // name: name,
         uid: uid,
+        type: type,
         payee: payee,
         end_epoch: end_epoch,
-        percentage: percentage,
+        prev_bal: account_bal,
+        amt: amt,
       });
     }
 
@@ -226,16 +284,16 @@ address 0x1{
     }
 
     // Returns (sender address,  end_epoch, percentage)
-    public fun query_instruction(account: address, uid: u64): (address, u64, u64) acquires Data {
+    public fun query_instruction(account: address, uid: u64): (u8, address, u64, u64) acquires Data {
       // TODO: This can be made faster if Data.payments is stored as a BST sorted by 
       let index = find(account, uid);
       if (Option::is_none<u64>(&index)) {
         // Case where payment is not found
-        return (0x0, 0, 0)
+        return (0, 0x0, 0, 0)
       } else {
         let payments = &borrow_global_mut<Data>(account).payments;
         let payment = Vector::borrow(payments, Option::extract<u64>(&mut index));
-        return (payment.payee, payment.end_epoch, payment.percentage)
+        return (payment.type, payment.payee, payment.end_epoch, payment.amt)
       }
     }
 
