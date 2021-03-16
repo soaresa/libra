@@ -139,45 +139,50 @@ address 0x1{
         let payments_idx = 0;
         
         while (payments_idx < payments_len) {
-          let payment = Vector::borrow_mut<Payment>(payments, payments_idx);
-          // If payment end epoch is greater, it's not an active payment anymore, so delete it
-          if (payment.end_epoch >= epoch) {
-            // A payment will happen now
-            // Obtain the amount to pay 
-            let amount = if (payment.type == PERCENT_OF_BALANCE) {
-              FixedPoint32::multiply_u64(account_bal , FixedPoint32::create_from_rational(payment.amt, 100))
-            } else if (payment.type == PERCENT_OF_CHANGE) {
-              if (account_bal > payment.prev_bal) {
-                FixedPoint32::multiply_u64(account_bal - payment.prev_bal, FixedPoint32::create_from_rational(payment.amt, 100))
+          let delete_payment = false;
+          {
+            let payment = Vector::borrow_mut<Payment>(payments, payments_idx);
+            // If payment end epoch is greater, it's not an active payment anymore, so delete it
+            if (payment.end_epoch >= epoch) {
+              // A payment will happen now
+              // Obtain the amount to pay 
+              let amount = if (payment.type == PERCENT_OF_BALANCE) {
+                FixedPoint32::multiply_u64(account_bal , FixedPoint32::create_from_rational(payment.amt, 100))
+              } else if (payment.type == PERCENT_OF_CHANGE) {
+                if (account_bal > payment.prev_bal) {
+                  FixedPoint32::multiply_u64(account_bal - payment.prev_bal, FixedPoint32::create_from_rational(payment.amt, 100))
+                } else {
+                  // if account balance hasn't gone up, no value is transferred
+                  0
+                }
               } else {
-                // if account balance hasn't gone up, no value is transferred
-                0
+                // in remaining cases, payment is simple amaount given, not a percentage
+                payment.amt
+              };
+              
+              if (amount != 0) {
+                LibraAccount::make_payment<GAS>(*account_addr, payment.payee, amount, x"", x"", vm);
+              };
+
+              // update previous balance for next calculation
+              payment.prev_bal = LibraAccount::balance<GAS>(*account_addr);
+
+              // if it's a one shot payment, delete it once it has done its job
+              if (payment.type == ONE_SHOT) {
+                delete_payment = true;
               }
+              
             } else {
-              // in remaining cases, payment is simple amaount given, not a percentage
-              payment.amt
+              delete_payment = true;
             };
-            // update previous balance for next calculation
-            payment.prev_bal = account_bal;
-
-            LibraAccount::make_payment<GAS>(*account_addr, payment.payee, amount, x"", x"", vm);
-
-            // if it's a one shot payment, delete it once it has done its job
-            if (payment.type == ONE_SHOT) {
-              Vector::remove<Payment>(payments, payments_idx);
-              // fix the indices
-              payments_len = payments_len - 1;
-              payments_idx = payments_idx - 1;
-            }
-            
-          } else {
-            // delete no longer active functions
-            Vector::remove<Payment>(payments, payments_idx);
-            // fix the indices
-            payments_len = payments_len - 1;
-            payments_idx = payments_idx - 1;
           };
-          payments_idx = payments_idx + 1;
+          if (delete_payment == true) {
+            Vector::remove<Payment>(payments, payments_idx);
+            payments_len = payments_len - 1;
+          }
+          else {
+            payments_idx = payments_idx + 1;
+          };
         };
         account_idx = account_idx + 1;
       };
