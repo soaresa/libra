@@ -20,12 +20,12 @@ script {
     AutoPay::enable_autopay(sender);
     assert(AutoPay::is_enabled(Signer::address_of(sender)), 0);
     
-    AutoPay::create_instruction(sender, 1, 0, {{jim}}, 5, 5);
+    AutoPay::create_instruction(sender, 1, 0, {{jim}}, 2, 5);
 
     let (type, payee, end_epoch, percentage) = AutoPay::query_instruction(Signer::address_of(sender), 1);
     assert(type == 0, 1);
     assert(payee == {{jim}}, 1);
-    assert(end_epoch == 5, 1);
+    assert(end_epoch == 2, 1);
     assert(percentage == 5, 1);
   }
 }
@@ -96,23 +96,6 @@ script {
 // check: EXECUTED
 
 
-
-
-// Checking balance before autopay module
-//! new-transaction
-//! sender: libraroot
-script {
-  use 0x1::LibraAccount;
-  use 0x1::GAS::GAS;
-  fun main() {
-    let alice_balance = LibraAccount::balance<GAS>({{alice}});
-    let jim_balance = LibraAccount::balance<GAS>({{jim}});
-    assert(alice_balance==10000, 1);
-    assert(jim_balance == 10000, 2);
-    }
-}
-// check: EXECUTED
-
 ///////////////////////////////////////////////////
 ///// Trigger Autopay Tick at 31 secs           ////
 /// i.e. 1 second after 1/2 epoch  /////
@@ -139,14 +122,9 @@ script {
   use 0x1::AutoPay;
   use 0x1::LibraAccount;
   use 0x1::GAS::GAS;
-  use 0x1::Debug::print;
-  use 0x1::LibraConfig;
-  fun main(_vm: &signer) {
+  use 0x1::Libra;
+  fun main(vm: &signer) {
     let ending_balance = LibraAccount::balance<GAS>({{alice}});
-    let epoch = LibraConfig::get_current_epoch();
-    print(&epoch);
-    print(&ending_balance);
-    assert(ending_balance < 10000, 7357003);
     assert(ending_balance == 9501, 7357004);
 
     // lucy didn't receive any funds, so no change in balance, so no payment sent
@@ -154,11 +132,9 @@ script {
     assert(ending_balance == 10000, 7357006);
 
     let ending_balance = LibraAccount::balance<GAS>({{thomas}});
-    assert(ending_balance < 10000, 7357005);
     assert(ending_balance == 9800, 7357006);
 
     let ending_balance = LibraAccount::balance<GAS>({{carlos}});
-    assert(ending_balance < 10000, 7357005);
     assert(ending_balance == 9500, 7357006);
     //Confirm the one-shot pledge was deleted
     let (type, payee, end_epoch, percentage) = AutoPay::query_instruction({{carlos}}, 1);
@@ -166,6 +142,19 @@ script {
     assert(payee == 0x0, 1);
     assert(end_epoch == 0, 1);
     assert(percentage == 0, 1);
+
+    let coin = Libra::mint<GAS>(vm, 10000);
+    assert(Libra::value<GAS>(&coin) == 10000, 1);
+    LibraAccount::vm_deposit_with_metadata<GAS>(
+        vm,
+        {{lucy}},
+        coin,
+        x"", x""
+    );
+
+    let ending_balance = LibraAccount::balance<GAS>({{lucy}});
+    assert(ending_balance == 20000, 7357006);
+    
   }
 }
 // check: EXECUTED
@@ -178,18 +167,6 @@ script {
 //! block-time: 61000000
 //! round: 65
 ///////////////////////////////////////////////////
-
-//! new-transaction
-//! sender: libraroot
-script {
-  use 0x1::Debug::print;
-  use 0x1::LibraConfig;
-  fun main(_vm: &signer) {
-    let epoch = LibraConfig::get_current_epoch();
-    print(&epoch);
-  }
-}
-// check: EXECUTED
 
 ///////////////////////////////////////////////////
 ///// Trigger Autopay Tick at 31 secs           ////
@@ -213,23 +190,56 @@ script {
 script {
   use 0x1::LibraAccount;
   use 0x1::GAS::GAS;
-  use 0x1::Debug::print;
-  use 0x1::LibraConfig;
+  use 0x1::AutoPay;
   fun main(_vm: &signer) {
     let ending_balance = LibraAccount::balance<GAS>({{alice}});
-    let epoch = LibraConfig::get_current_epoch();
-    print(&epoch);
-    print(&ending_balance);
-    assert(ending_balance < 9501, 7357003);
     assert(ending_balance == 9026, 7357004);
+
+    // lucy will have paid 5% on the 10000 she received last epoch
+    let ending_balance = LibraAccount::balance<GAS>({{lucy}});
+    assert(ending_balance == 19501, 7357006);
     
     let ending_balance = LibraAccount::balance<GAS>({{thomas}});
-    assert(ending_balance < 9800, 7357005);
     assert(ending_balance == 9600, 7357006);
 
     // no change, one-shot pledge is finished
     let ending_balance = LibraAccount::balance<GAS>({{carlos}});
     assert(ending_balance == 9500, 7357006);
+
+    // check balance of recipients
+    let ending_balance = LibraAccount::balance<GAS>({{jim}});
+    assert(ending_balance == 10974, 7357006);
+
+    let ending_balance = LibraAccount::balance<GAS>({{paul}});
+    assert(ending_balance == 10499, 7357006);
+
+    let ending_balance = LibraAccount::balance<GAS>({{denice}});
+    assert(ending_balance == 10400, 7357006);
+
+    let ending_balance = LibraAccount::balance<GAS>({{eric}});
+    assert(ending_balance == 10500, 7357006);
+
+    //all pledges should be deleted as they expired in epoch 2, check to confirm
+    //Confirm the one-shot pledge was deleted
+    let (type, payee, end_epoch, percentage) = AutoPay::query_instruction({{alice}}, 1);
+    assert(type == 0, 1);
+    assert(payee == 0x0, 1);
+    assert(end_epoch == 0, 1);
+    assert(percentage == 0, 1);
+
+    let (type, payee, end_epoch, percentage) = AutoPay::query_instruction({{lucy}}, 1);
+    assert(type == 0, 1);
+    assert(payee == 0x0, 1);
+    assert(end_epoch == 0, 1);
+    assert(percentage == 0, 1);
+
+    let (type, payee, end_epoch, percentage) = AutoPay::query_instruction({{thomas}}, 1);
+    assert(type == 0, 1);
+    assert(payee == 0x0, 1);
+    assert(end_epoch == 0, 1);
+    assert(percentage == 0, 1);
   }
+
+
 }
 // check: EXECUTED
