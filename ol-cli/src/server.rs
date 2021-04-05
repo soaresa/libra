@@ -48,8 +48,13 @@ pub async fn start_server() {
     let chain = warp::path("chain").and(warp::get()).map(|| {
         // create server event source
         let event_stream = interval(Duration::from_secs(1)).map(move |_| {
-            let info = crate::chain_info::read_chain_info_cache();
-            sse_chain_info(info)
+          
+          // this reads from cache, since fetch_chain_info doesn't work
+          // let info = crate::chain_info::read_chain_info_cache();
+          // sse_chain_info(info)
+
+          let info = crate::chain_info::fetch_chain_info();
+          sse_chain_info(info.0.unwrap())
         });
         // reply using server-sent events
         warp::sse::reply(event_stream)
