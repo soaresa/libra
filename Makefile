@@ -325,13 +325,13 @@ devnet: stop clear fix fix-genesis devnet-keys devnet-yaml start
 # This will work for validator nodes alice, bob, carol, and any fullnodes; 'eve'
 
 devnet-keys: 
-	@printf '${MNEM}' | cargo run -p ol-cli -- init
+	cargo run -p ol-cli -- init
 
 
-devnet-onboard: clear fix
-	#starts config for a new miner "eve", uses the devnet github repo for ceremony
-	cargo r -p miner -- init --skip-miner <<< $$'${MNEM}'
-	cargo r -p miner -- genesis
+# TODO: do we need this?
+devnet-onboard: clear fix devnet-keys
+# starts config for a new miner "eve", uses the devnet github repo for ceremony
+	cargo r -p ol-cli -- init
 
 devnet-previous: stop clear 
 # runs a smoke test from fixtures. Uses genesis blob from fixtures, assumes 3 validators, and test settings.
