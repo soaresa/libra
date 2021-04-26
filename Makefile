@@ -317,43 +317,12 @@ debug:
  
 
 ##### DEVNET TESTS #####
-# Quickly start a devnet with fixture files. To do a full devnet setup see 'devnet-reset' below
 
-devnet: stop clear fix fix-genesis dev-wizard start
+
+devnet: clear fix fix-genesis dev-wizard start
 # runs a smoke test from fixtures. 
 # Uses genesis blob from fixtures, assumes 3 validators, and test settings.
 # This will work for validator nodes alice, bob, carol, and any fullnodes; 'eve'
-
-devnet-keys: 
-	cargo run -p ol-cli -- init
-
-
-# TODO: do we need this?
-devnet-onboard: clear fix devnet-keys
-# starts config for a new miner "eve", uses the devnet github repo for ceremony
-	cargo r -p ol-cli -- init
-
-devnet-previous: stop clear 
-# runs a smoke test from fixtures. Uses genesis blob from fixtures, assumes 3 validators, and test settings.
-	V=previous make fix devnet-keys start
-
-
-##### DEVNET TESTS #####
-# Quickly start a devnet with fixture files. To do a full devnet setup see 'devnet-reset' below
-
-frozen: 
-# A QUICK TEST FROM FIXTURES. ASSUMES EVERYTHING WAS SETUP: new genesis-blobs, and mock archive infrastructure. For this see `devnet-archive` below 
-
-# runs a smoke test from fixtures. Uses genesis blob from fixtures, assumes 3 validators, and test settings.
-
-# This will work for validator nodes alice, bob, carol. New onboarded "eve" needs to run devnet-onboard
-
-	make clear fix fix-genesis dev-wizard start
-
-dev-wizard:
-#  REQUIRES there is a genesis.blob in the fixtures/genesis/<version> you are testing
-	MNEM='${MNEM}' cargo run -p miner -- val-wizard --skip-mining --skip-fetch-genesis --chain-id 1 --github-org OLSF --repo dev-genesis
-
 
 dev-join: clear fix dev-wizard
 # REQUIRES MOCK GIT INFRASTRUCTURE: OLSF/dev-genesis OLSF/dev-epoch-archive
@@ -367,16 +336,17 @@ dev-join: clear fix dev-wizard
 # start a node with fullnode.node.yaml configs
 	make start-full
 
-### FULL DEVNET E2E ####
+dev-wizard:
+#  REQUIRES there is a genesis.blob in the fixtures/genesis/<version> you are testing
+	MNEM='${MNEM}' cargo run -p miner -- val-wizard --skip-mining --skip-fetch-genesis --chain-id 1 --github-org OLSF --repo dev-genesis
 
-devnet:
-	make genesis start
+#### DEVNET INFRASTRUCTURE ####
+# usually do this on Alice, which has the dev-epoch-archive repo, and dev-genesis
 
-# Also save the genesis fixtures, needs to happen before fix.
+# Do the ceremony: and also save the genesis fixtures, needs to happen before fix.
 dev-register: clear fix register genesis dev-save-genesis fix-genesis
 
-#### PERSIST THE MOCK ARCHIVES TO DEVNET INFRASTRUCTURE ####
-# usually do this on Alice, which has the dev-epoch-archive repo, and dev-genesis
+# Save the files to mock infrastructure i.e. devnet github
 dev-infra: dev-save-genesis dev-backup-archive dev-commit
 
 dev-save-genesis: set-waypoint
