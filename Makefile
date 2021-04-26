@@ -350,11 +350,10 @@ frozen:
 
 # This will work for validator nodes alice, bob, carol. New onboarded "eve" needs to run devnet-onboard
 
-	MNEM='${MNEM}' make stop clear fix dev-wizard start
+	make clear fix fix-genesis dev-wizard start
 
 dev-wizard:
-# starts config for a new miner "eve", uses the devnet github repo for ceremony
-# get genesis.blcok from MOCK genesis store OLSF/dev-genesis
+#  REQUIRES there is a genesis.blob in the fixtures/genesis/<version> you are testing
 	MNEM='${MNEM}' cargo run -p miner -- val-wizard --skip-mining --skip-fetch-genesis --chain-id 1 --github-org OLSF --repo dev-genesis
 
 
