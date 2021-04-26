@@ -294,10 +294,10 @@ stdlib:
 keygen:
 	cd ${DATA_PATH} && miner keygen
 
-miner-genesis:
-	cd ${DATA_PATH} && NODE_ENV=${NODE_ENV} miner genesis
+# miner-genesis:
+# 	cd ${DATA_PATH} && NODE_ENV=${NODE_ENV} miner genesis
 
-reset: stop clear fixtures init keys genesis daemon
+# reset: stop clear fixtures init keys  daemon
 
 remove-keys:
 	make stop
@@ -325,10 +325,8 @@ devnet: stop clear fix fix-genesis devnet-keys devnet-yaml start
 # This will work for validator nodes alice, bob, carol, and any fullnodes; 'eve'
 
 devnet-keys: 
-	@printf '${MNEM}' | cargo run -p ol-cli -- init --skip-miner
+	@printf '${MNEM}' | cargo run -p ol-cli -- init
 
-devnet-yaml:
-	cargo run -p miner -- genesis
 
 devnet-onboard: clear fix
 	#starts config for a new miner "eve", uses the devnet github repo for ceremony
