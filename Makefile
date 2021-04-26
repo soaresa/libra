@@ -325,7 +325,7 @@ devnet: stop clear fix fix-genesis devnet-keys devnet-yaml start
 # This will work for validator nodes alice, bob, carol, and any fullnodes; 'eve'
 
 devnet-keys: 
-	@printf '${MNEM}' | cargo run -p miner -- init --skip-miner
+	@printf '${MNEM}' | cargo run -p ol-cli -- init --skip-miner
 
 devnet-yaml:
 	cargo run -p miner -- genesis
