@@ -319,7 +319,7 @@ debug:
 ##### DEVNET TESTS #####
 # Quickly start a devnet with fixture files. To do a full devnet setup see 'devnet-reset' below
 
-devnet: stop clear fix fix-genesis devnet-keys devnet-yaml start
+devnet: stop clear fix fix-genesis dev-wizard start
 # runs a smoke test from fixtures. 
 # Uses genesis blob from fixtures, assumes 3 validators, and test settings.
 # This will work for validator nodes alice, bob, carol, and any fullnodes; 'eve'
@@ -335,7 +335,7 @@ devnet-onboard: clear fix devnet-keys
 
 devnet-previous: stop clear 
 # runs a smoke test from fixtures. Uses genesis blob from fixtures, assumes 3 validators, and test settings.
-	V=previous make fix devnet-keys devnet-yaml start
+	V=previous make fix devnet-keys start
 
 
 ##### DEVNET TESTS #####
@@ -370,15 +370,12 @@ dev-join: clear fix dev-wizard
 ### FULL DEVNET E2E ####
 
 devnet:
-	MNEM='${MNEM}' make genesis start
+	make genesis start
 
-dev-register: clear fix
-	echo ${MNEM} | head -c -1 | make register
 # Also save the genesis fixtures, needs to happen before fix.
-	make dev-save-genesis fix-genesis
+dev-register: clear fix register genesis dev-save-genesis fix-genesis
 
 #### PERSIST THE MOCK ARCHIVES TO DEVNET INFRASTRUCTURE ####
-
 # usually do this on Alice, which has the dev-epoch-archive repo, and dev-genesis
 dev-infra: dev-save-genesis dev-backup-archive dev-commit
 
