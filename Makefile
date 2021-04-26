@@ -253,11 +253,6 @@ ifdef TEST
 		rm ${DATA_PATH}/0L.toml; \
 	fi 
 
-# skip  genesis files with fixtures, there may be no version
-ifndef SKIP_BLOB
-	cp ./ol/fixtures/genesis/${V}/genesis.blob ${DATA_PATH}/
-	cp ./ol/fixtures/genesis/${V}/genesis_waypoint ${DATA_PATH}/
-endif
 # skip miner configuration with fixtures
 	cp ./ol/fixtures/configs/${NS}.toml ${DATA_PATH}/0L.toml
 # skip mining proof zero with fixtures
@@ -267,6 +262,10 @@ endif
 # place a mock account.json in root, used as template for onboarding
 	cp ./ol/fixtures/account/${NS}.account.json ${DATA_PATH}/account.json
 endif
+
+fix-genesis:
+	cp ./ol/fixtures/genesis/${V}/genesis.blob ${DATA_PATH}/
+	cp ./ol/fixtures/genesis/${V}/genesis_waypoint ${DATA_PATH}/
 
 
 #### HELPERS ####
@@ -320,8 +319,9 @@ debug:
 ##### DEVNET TESTS #####
 # Quickly start a devnet with fixture files. To do a full devnet setup see 'devnet-reset' below
 
-devnet: stop clear fix devnet-keys devnet-yaml start
-# runs a smoke test from fixtures. Uses genesis blob from fixtures, assumes 3 validators, and test settings.
+devnet: stop clear fix fix-genesis devnet-keys devnet-yaml start
+# runs a smoke test from fixtures. 
+# Uses genesis blob from fixtures, assumes 3 validators, and test settings.
 # This will work for validator nodes alice, bob, carol, and any fullnodes; 'eve'
 
 devnet-keys: 
@@ -377,18 +377,21 @@ devnet:
 
 dev-register: clear fix
 	echo ${MNEM} | head -c -1 | make register
+# Also save the genesis fixtures, needs to happen before fix.
+	make dev-save-genesis fix-genesis
 
 #### PERSIST THE MOCK ARCHIVES TO DEVNET INFRASTRUCTURE ####
 
 # usually do this on Alice, which has the dev-epoch-archive repo, and dev-genesis
-dev-infra: dev-save-genesis dev-backup-archive
+dev-infra: dev-save-genesis dev-backup-archive dev-commit
 
 dev-save-genesis: set-waypoint
 	rsync -a ${DATA_PATH}/genesis* ${SOURCE}/ol/fixtures/genesis/${V}/
 	git add ${SOURCE}/ol/fixtures/genesis/${V}/
-	git commit -a -m "save genesis fixtures to ${V}" | true
-	git push | true
 
 dev-backup-archive:
 	cd ${HOME}/dev-epoch-archive && make devnet-backup
 
+dev-commit:
+	git commit -a -m "save genesis fixtures to ${V}" | true
+	git push | true
