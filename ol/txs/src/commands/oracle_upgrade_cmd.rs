@@ -17,9 +17,9 @@ pub struct OracleUpgradeCmd {
 
 pub fn oracle_tx_script(upgrade_file_path: &PathBuf) -> Script {
     let mut file = fs::File::open(upgrade_file_path)
-        .expect("file should open read only");
+        .expect("stdlib payload should open read-only");
     let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer).expect("failed to read the file");
+    file.read_to_end(&mut buffer).expect("failed to read the stdlib payload");
 
     let id = 1; // upgrade is oracle #1
     transaction_builder::encode_ol_oracle_tx_script(id, buffer)

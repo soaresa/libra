@@ -65,7 +65,7 @@ init:
 	cp ${SWARM_TEMP}/0/0L.toml ${HOME}/.0L/0L.toml
 
 submit:
-	cd ${SOURCE_PATH} && cargo run -p txs -- --swarm-path ${SWARM_TEMP} --swarm-persona ${PERSONA} oracle-upgrade
+	sudo cd ${SOURCE_PATH} && cargo run -p txs -- --swarm-path ${SWARM_TEMP} --swarm-persona ${PERSONA} oracle-upgrade
 
 query:
 	cd ${SOURCE_PATH} && cargo run -p ol-cli -- --swarm-path ${SWARM_TEMP} --swarm-persona ${PERSONA} query --blockheight | grep -Eo [0-9]+ | tail -n1
