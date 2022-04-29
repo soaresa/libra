@@ -88,8 +88,7 @@ pub fn mine_once(config: &AppCfg) -> Result<VDFProof, Error> {
 /// Write block to file
 pub fn mine_and_submit(
     config: &AppCfg,
-    tx_params: TxParams,
-    is_operator: bool,
+    tx_params: TxParams
 ) -> Result<(), Error> {
     // get the location of this miner's blocks
     let mut blocks_dir = config.workspace.node_home.clone();
@@ -115,7 +114,7 @@ pub fn mine_and_submit(
             );
 
             // submits backlog to client
-            match backlog::process_backlog(&config, &tx_params, is_operator) {
+            match backlog::process_backlog(&config, &tx_params) {
                 Ok(()) => println!("Success: Proof committed to chain"),
                 Err(e) => {
                     // don't stop on tx errors
@@ -153,7 +152,7 @@ pub fn parse_block_height(blocks_dir: &PathBuf) -> (Option<u64>, Option<PathBuf>
         if let Ok(entry) = entry {
             let file = fs::File::open(&entry).expect("Could not open block file");
             let reader = BufReader::new(file);
-            let block: VDFProof = serde_json::from_reader(reader).unwrap();
+            let block: VDFProof = serde_json::from_reader(reader).expect(&format!("could not parse epoch proof {:?}", &entry));
             let blocknumber = block.height;
             if max_block.is_none() {
                 max_block = Some(blocknumber);
