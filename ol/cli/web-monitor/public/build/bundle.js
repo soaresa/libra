@@ -20249,7 +20249,7 @@ var app = (function () {
     }
 
     // (15:25) {#if payments && payments.length > 0 && !has_notes}
-    function create_if_block_4$2(ctx) {
+    function create_if_block_4$3(ctx) {
     	let addressnotetip;
     	let current;
     	addressnotetip = new AddressNoteTip({ $$inline: true });
@@ -20278,7 +20278,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4$2.name,
+    		id: create_if_block_4$3.name,
     		type: "if",
     		source: "(15:25) {#if payments && payments.length > 0 && !has_notes}",
     		ctx
@@ -20816,7 +20816,7 @@ var app = (function () {
     	let current_block_type_index;
     	let if_block1;
     	let current;
-    	let if_block0 = /*payments*/ ctx[0] && /*payments*/ ctx[0].length > 0 && !/*has_notes*/ ctx[1] && create_if_block_4$2(ctx);
+    	let if_block0 = /*payments*/ ctx[0] && /*payments*/ ctx[0].length > 0 && !/*has_notes*/ ctx[1] && create_if_block_4$3(ctx);
     	const if_block_creators = [create_if_block$8, create_else_block_1$4];
     	const if_blocks = [];
 
@@ -20859,7 +20859,7 @@ var app = (function () {
     						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block0 = create_if_block_4$2(ctx);
+    					if_block0 = create_if_block_4$3(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(h2, null);
@@ -21009,11 +21009,11 @@ var app = (function () {
 
     function get_each_context$5(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[2] = list[i];
+    	child_ctx[3] = list[i];
     	return child_ctx;
     }
 
-    // (35:0) {#if vouches}
+    // (37:0) {#if vouches}
     function create_if_block$7(ctx) {
     	let if_block_anchor;
 
@@ -21057,14 +21057,14 @@ var app = (function () {
     		block,
     		id: create_if_block$7.name,
     		type: "if",
-    		source: "(35:0) {#if vouches}",
+    		source: "(37:0) {#if vouches}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (38:2) {:else}
+    // (40:2) {:else}
     function create_else_block$4(ctx) {
     	let table;
     	let thead;
@@ -21109,15 +21109,15 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(th0, file$b, 41, 10, 1008);
-    			add_location(th1, file$b, 42, 10, 1032);
-    			add_location(th2, file$b, 43, 10, 1061);
-    			add_location(th3, file$b, 44, 10, 1089);
-    			add_location(tr, file$b, 40, 8, 993);
-    			add_location(thead, file$b, 39, 6, 977);
-    			add_location(tbody, file$b, 47, 6, 1138);
+    			add_location(th0, file$b, 43, 10, 1132);
+    			add_location(th1, file$b, 44, 10, 1156);
+    			add_location(th2, file$b, 45, 10, 1185);
+    			add_location(th3, file$b, 46, 10, 1213);
+    			add_location(tr, file$b, 42, 8, 1117);
+    			add_location(thead, file$b, 41, 6, 1101);
+    			add_location(tbody, file$b, 49, 6, 1262);
     			attr_dev(table, "class", "uk-table");
-    			add_location(table, file$b, 38, 4, 946);
+    			add_location(table, file$b, 40, 4, 1070);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, table, anchor);
@@ -21172,14 +21172,14 @@ var app = (function () {
     		block,
     		id: create_else_block$4.name,
     		type: "else",
-    		source: "(38:2) {:else}",
+    		source: "(40:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (36:2) {#if vouches.length == 0}
+    // (38:2) {#if vouches.length == 0}
     function create_if_block_1$5(ctx) {
     	let p;
 
@@ -21187,7 +21187,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Empty vouch";
-    			add_location(p, file$b, 36, 4, 913);
+    			add_location(p, file$b, 38, 4, 1037);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -21202,14 +21202,44 @@ var app = (function () {
     		block,
     		id: create_if_block_1$5.name,
     		type: "if",
-    		source: "(36:2) {#if vouches.length == 0}",
+    		source: "(38:2) {#if vouches.length == 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (54:14) {#if vouch.is_received}
+    // (56:14) {#if vouch.is_received}
+    function create_if_block_4$2(ctx) {
+    	let span;
+
+    	const block = {
+    		c: function create() {
+    			span = element("span");
+    			attr_dev(span, "class", "uk-text-success");
+    			attr_dev(span, "uk-icon", "icon: check");
+    			add_location(span, file$b, 56, 16, 1460);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, span, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(span);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_4$2.name,
+    		type: "if",
+    		source: "(56:14) {#if vouch.is_received}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (63:38) 
     function create_if_block_3$3(ctx) {
     	let span;
 
@@ -21218,7 +21248,7 @@ var app = (function () {
     			span = element("span");
     			attr_dev(span, "class", "uk-text-success");
     			attr_dev(span, "uk-icon", "icon: check");
-    			add_location(span, file$b, 54, 16, 1336);
+    			add_location(span, file$b, 63, 16, 1692);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -21232,29 +21262,26 @@ var app = (function () {
     		block,
     		id: create_if_block_3$3.name,
     		type: "if",
-    		source: "(54:14) {#if vouch.is_received}",
+    		source: "(63:38) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (59:14) {#if vouch.is_sent}
+    // (61:14) {#if vouch.is_sent == null}
     function create_if_block_2$4(ctx) {
-    	let span;
+    	let t;
 
     	const block = {
     		c: function create() {
-    			span = element("span");
-    			attr_dev(span, "class", "uk-text-success");
-    			attr_dev(span, "uk-icon", "icon: check");
-    			add_location(span, file$b, 59, 16, 1501);
+    			t = text("???");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, span, anchor);
+    			insert_dev(target, t, anchor);
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(span);
+    			if (detaching) detach_dev(t);
     		}
     	};
 
@@ -21262,30 +21289,37 @@ var app = (function () {
     		block,
     		id: create_if_block_2$4.name,
     		type: "if",
-    		source: "(59:14) {#if vouch.is_sent}",
+    		source: "(61:14) {#if vouch.is_sent == null}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (49:8) {#each vouches as vouch}
+    // (51:8) {#each vouches as vouch}
     function create_each_block$5(ctx) {
     	let tr;
     	let td0;
-    	let t0_value = /*vouch*/ ctx[2].note + "";
+    	let t0_value = /*vouch*/ ctx[3].note + "";
     	let t0;
     	let t1;
     	let td1;
-    	let t2_value = /*vouch*/ ctx[2].address + "";
+    	let t2_value = /*vouch*/ ctx[3].address + "";
     	let t2;
     	let t3;
     	let td2;
     	let t4;
     	let td3;
     	let t5;
-    	let if_block0 = /*vouch*/ ctx[2].is_received && create_if_block_3$3(ctx);
-    	let if_block1 = /*vouch*/ ctx[2].is_sent && create_if_block_2$4(ctx);
+    	let if_block0 = /*vouch*/ ctx[3].is_received && create_if_block_4$2(ctx);
+
+    	function select_block_type_1(ctx, dirty) {
+    		if (/*vouch*/ ctx[3].is_sent == null) return create_if_block_2$4;
+    		if (/*vouch*/ ctx[3].is_sent) return create_if_block_3$3;
+    	}
+
+    	let current_block_type = select_block_type_1(ctx);
+    	let if_block1 = current_block_type && current_block_type(ctx);
 
     	const block = {
     		c: function create() {
@@ -21302,11 +21336,11 @@ var app = (function () {
     			td3 = element("td");
     			if (if_block1) if_block1.c();
     			t5 = space();
-    			add_location(td0, file$b, 50, 12, 1206);
-    			add_location(td1, file$b, 51, 12, 1240);
-    			add_location(td2, file$b, 52, 12, 1277);
-    			add_location(td3, file$b, 57, 12, 1446);
-    			add_location(tr, file$b, 49, 10, 1189);
+    			add_location(td0, file$b, 52, 12, 1330);
+    			add_location(td1, file$b, 53, 12, 1364);
+    			add_location(td2, file$b, 54, 12, 1401);
+    			add_location(td3, file$b, 59, 12, 1570);
+    			add_location(tr, file$b, 51, 10, 1313);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -21324,12 +21358,12 @@ var app = (function () {
     			append_dev(tr, t5);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*vouches*/ 1 && t0_value !== (t0_value = /*vouch*/ ctx[2].note + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*vouches*/ 1 && t2_value !== (t2_value = /*vouch*/ ctx[2].address + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*vouches*/ 1 && t0_value !== (t0_value = /*vouch*/ ctx[3].note + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*vouches*/ 1 && t2_value !== (t2_value = /*vouch*/ ctx[3].address + "")) set_data_dev(t2, t2_value);
 
-    			if (/*vouch*/ ctx[2].is_received) {
+    			if (/*vouch*/ ctx[3].is_received) {
     				if (if_block0) ; else {
-    					if_block0 = create_if_block_3$3(ctx);
+    					if_block0 = create_if_block_4$2(ctx);
     					if_block0.c();
     					if_block0.m(td2, null);
     				}
@@ -21338,21 +21372,23 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (/*vouch*/ ctx[2].is_sent) {
-    				if (if_block1) ; else {
-    					if_block1 = create_if_block_2$4(ctx);
+    			if (current_block_type !== (current_block_type = select_block_type_1(ctx))) {
+    				if (if_block1) if_block1.d(1);
+    				if_block1 = current_block_type && current_block_type(ctx);
+
+    				if (if_block1) {
     					if_block1.c();
     					if_block1.m(td3, null);
     				}
-    			} else if (if_block1) {
-    				if_block1.d(1);
-    				if_block1 = null;
     			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(tr);
     			if (if_block0) if_block0.d();
-    			if (if_block1) if_block1.d();
+
+    			if (if_block1) {
+    				if_block1.d();
+    			}
     		}
     	};
 
@@ -21360,7 +21396,7 @@ var app = (function () {
     		block,
     		id: create_each_block$5.name,
     		type: "each",
-    		source: "(49:8) {#each vouches as vouch}",
+    		source: "(51:8) {#each vouches as vouch}",
     		ctx
     	});
 
@@ -21381,7 +21417,7 @@ var app = (function () {
     			if (if_block) if_block.c();
     			if_block_anchor = empty$1();
     			attr_dev(h3, "class", "uk-text-muted");
-    			add_location(h3, file$b, 33, 0, 830);
+    			add_location(h3, file$b, 35, 0, 954);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -21431,6 +21467,7 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('ValidatorVouch', slots, []);
     	let { validator } = $$props;
+    	let { set } = $$props;
     	let vouches;
 
     	afterUpdate(() => {
@@ -21440,10 +21477,12 @@ var app = (function () {
 
     		// build vouch table data
     		$$invalidate(0, vouches = validator.vouch.received.map(each => {
+    			let isSent = set.find(x => x.account_address == each.address);
+
     			return {
     				note: each.note,
     				address: each.address,
-    				is_sent: false,
+    				is_sent: isSent == null ? null : false,
     				is_received: true
     			};
     		}));
@@ -21464,7 +21503,7 @@ var app = (function () {
     		});
     	});
 
-    	const writable_props = ['validator'];
+    	const writable_props = ['validator', 'set'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<ValidatorVouch> was created with unknown prop '${key}'`);
@@ -21472,12 +21511,14 @@ var app = (function () {
 
     	$$self.$$set = $$props => {
     		if ('validator' in $$props) $$invalidate(1, validator = $$props.validator);
+    		if ('set' in $$props) $$invalidate(2, set = $$props.set);
     	};
 
-    	$$self.$capture_state = () => ({ afterUpdate, validator, vouches });
+    	$$self.$capture_state = () => ({ afterUpdate, validator, set, vouches });
 
     	$$self.$inject_state = $$props => {
     		if ('validator' in $$props) $$invalidate(1, validator = $$props.validator);
+    		if ('set' in $$props) $$invalidate(2, set = $$props.set);
     		if ('vouches' in $$props) $$invalidate(0, vouches = $$props.vouches);
     	};
 
@@ -21485,13 +21526,13 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [vouches, validator];
+    	return [vouches, validator, set];
     }
 
     class ValidatorVouch extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$1(this, options, instance$b, create_fragment$b, safe_not_equal, { validator: 1 });
+    		init$1(this, options, instance$b, create_fragment$b, safe_not_equal, { validator: 1, set: 2 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -21506,6 +21547,10 @@ var app = (function () {
     		if (/*validator*/ ctx[1] === undefined && !('validator' in props)) {
     			console.warn("<ValidatorVouch> was created without expected prop 'validator'");
     		}
+
+    		if (/*set*/ ctx[2] === undefined && !('set' in props)) {
+    			console.warn("<ValidatorVouch> was created without expected prop 'set'");
+    		}
     	}
 
     	get validator() {
@@ -21515,6 +21560,14 @@ var app = (function () {
     	set validator(value) {
     		throw new Error("<ValidatorVouch>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
+
+    	get set() {
+    		throw new Error("<ValidatorVouch>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set set(value) {
+    		throw new Error("<ValidatorVouch>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
     /* src/components/validators/ValidatorModal.svelte generated by Svelte v3.44.2 */
@@ -21522,7 +21575,7 @@ var app = (function () {
     const { console: console_1 } = globals;
     const file$a = "src/components/validators/ValidatorModal.svelte";
 
-    // (43:4) {#if validator}
+    // (44:4) {#if validator}
     function create_if_block$6(ctx) {
     	let div;
     	let button;
@@ -21592,7 +21645,10 @@ var app = (function () {
     	let current;
 
     	validatorvouch = new ValidatorVouch({
-    			props: { validator: /*validator*/ ctx[0] },
+    			props: {
+    				validator: /*validator*/ ctx[0],
+    				set: /*set*/ ctx[1]
+    			},
     			$$inline: true
     		});
 
@@ -21672,42 +21728,42 @@ var app = (function () {
     			attr_dev(button, "class", "uk-modal-close-default");
     			attr_dev(button, "type", "button");
     			attr_dev(button, "uk-close", "");
-    			add_location(button, file$a, 44, 12, 1379);
+    			add_location(button, file$a, 45, 12, 1412);
     			attr_dev(h2, "class", "uk-modal-title uk-text-muted");
-    			add_location(h2, file$a, 45, 12, 1463);
-    			add_location(th0, file$a, 49, 24, 1634);
-    			add_location(th1, file$a, 50, 24, 1668);
-    			add_location(tr0, file$a, 48, 20, 1605);
-    			add_location(thead, file$a, 47, 16, 1577);
+    			add_location(h2, file$a, 46, 12, 1496);
+    			add_location(th0, file$a, 50, 24, 1667);
+    			add_location(th1, file$a, 51, 24, 1701);
+    			add_location(tr0, file$a, 49, 20, 1638);
+    			add_location(thead, file$a, 48, 16, 1610);
     			attr_dev(td0, "class", "uk-table-expand");
-    			add_location(td0, file$a, 55, 20, 1798);
-    			add_location(td1, file$a, 56, 20, 1867);
-    			add_location(tr1, file$a, 54, 20, 1773);
-    			add_location(td2, file$a, 59, 24, 1979);
+    			add_location(td0, file$a, 56, 20, 1831);
+    			add_location(td1, file$a, 57, 20, 1900);
+    			add_location(tr1, file$a, 55, 20, 1806);
+    			add_location(td2, file$a, 60, 24, 2012);
     			attr_dev(td3, "class", "uk-text-break");
-    			add_location(td3, file$a, 60, 24, 2037);
-    			add_location(tr2, file$a, 58, 20, 1950);
-    			add_location(td4, file$a, 63, 24, 2167);
-    			add_location(td5, file$a, 64, 24, 2226);
-    			add_location(tr3, file$a, 62, 20, 2138);
-    			add_location(td6, file$a, 67, 24, 2340);
-    			add_location(td7, file$a, 68, 24, 2402);
-    			add_location(tr4, file$a, 66, 20, 2311);
-    			add_location(td8, file$a, 71, 24, 2527);
-    			add_location(td9, file$a, 72, 24, 2577);
-    			add_location(tr5, file$a, 70, 20, 2498);
-    			add_location(td10, file$a, 75, 24, 2695);
-    			add_location(td11, file$a, 76, 24, 2758);
-    			add_location(tr6, file$a, 74, 20, 2666);
-    			add_location(td12, file$a, 79, 24, 2876);
-    			add_location(td13, file$a, 80, 24, 2928);
-    			add_location(tr7, file$a, 78, 20, 2847);
-    			add_location(tbody, file$a, 53, 16, 1745);
+    			add_location(td3, file$a, 61, 24, 2070);
+    			add_location(tr2, file$a, 59, 20, 1983);
+    			add_location(td4, file$a, 64, 24, 2200);
+    			add_location(td5, file$a, 65, 24, 2259);
+    			add_location(tr3, file$a, 63, 20, 2171);
+    			add_location(td6, file$a, 68, 24, 2373);
+    			add_location(td7, file$a, 69, 24, 2435);
+    			add_location(tr4, file$a, 67, 20, 2344);
+    			add_location(td8, file$a, 72, 24, 2560);
+    			add_location(td9, file$a, 73, 24, 2610);
+    			add_location(tr5, file$a, 71, 20, 2531);
+    			add_location(td10, file$a, 76, 24, 2728);
+    			add_location(td11, file$a, 77, 24, 2791);
+    			add_location(tr6, file$a, 75, 20, 2699);
+    			add_location(td12, file$a, 80, 24, 2909);
+    			add_location(td13, file$a, 81, 24, 2961);
+    			add_location(tr7, file$a, 79, 20, 2880);
+    			add_location(tbody, file$a, 54, 16, 1778);
     			attr_dev(table, "class", "uk-table");
-    			add_location(table, file$a, 46, 12, 1536);
+    			add_location(table, file$a, 47, 12, 1569);
     			attr_dev(div, "id", "validator-modal-body");
     			attr_dev(div, "class", "uk-modal-dialog uk-modal-body svelte-zc3fmg");
-    			add_location(div, file$a, 43, 8, 1297);
+    			add_location(div, file$a, 44, 8, 1330);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -21780,6 +21836,7 @@ var app = (function () {
     			if ((!current || dirty & /*validator*/ 1) && t31_value !== (t31_value = can_create_account(/*validator*/ ctx[0]) + "")) set_data_dev(t31, t31_value);
     			const validatorvouch_changes = {};
     			if (dirty & /*validator*/ 1) validatorvouch_changes.validator = /*validator*/ ctx[0];
+    			if (dirty & /*set*/ 2) validatorvouch_changes.set = /*set*/ ctx[1];
     			validatorvouch.$set(validatorvouch_changes);
     			const autopay_changes = {};
     			if (dirty & /*validator*/ 1) autopay_changes.account = /*validator*/ ctx[0];
@@ -21807,7 +21864,7 @@ var app = (function () {
     		block,
     		id: create_if_block$6.name,
     		type: "if",
-    		source: "(43:4) {#if validator}",
+    		source: "(44:4) {#if validator}",
     		ctx
     	});
 
@@ -21825,7 +21882,7 @@ var app = (function () {
     			if (if_block) if_block.c();
     			attr_dev(div, "id", "val-modal");
     			attr_dev(div, "uk-modal", "");
-    			add_location(div, file$a, 41, 0, 1239);
+    			add_location(div, file$a, 42, 0, 1272);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -21916,8 +21973,9 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('ValidatorModal', slots, []);
     	let { validator } = $$props;
+    	let { set } = $$props;
     	console.log(validator);
-    	const writable_props = ['validator'];
+    	const writable_props = ['validator', 'set'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<ValidatorModal> was created with unknown prop '${key}'`);
@@ -21925,12 +21983,14 @@ var app = (function () {
 
     	$$self.$$set = $$props => {
     		if ('validator' in $$props) $$invalidate(0, validator = $$props.validator);
+    		if ('set' in $$props) $$invalidate(1, set = $$props.set);
     	};
 
     	$$self.$capture_state = () => ({
     		AutoPay,
     		ValidatorVouch,
     		validator,
+    		set,
     		get_operator_account,
     		has_operator_balance,
     		can_create_account
@@ -21938,19 +21998,20 @@ var app = (function () {
 
     	$$self.$inject_state = $$props => {
     		if ('validator' in $$props) $$invalidate(0, validator = $$props.validator);
+    		if ('set' in $$props) $$invalidate(1, set = $$props.set);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [validator];
+    	return [validator, set];
     }
 
     class ValidatorModal extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$1(this, options, instance$a, create_fragment$a, safe_not_equal, { validator: 0 });
+    		init$1(this, options, instance$a, create_fragment$a, safe_not_equal, { validator: 0, set: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -21965,6 +22026,10 @@ var app = (function () {
     		if (/*validator*/ ctx[0] === undefined && !('validator' in props)) {
     			console_1.warn("<ValidatorModal> was created without expected prop 'validator'");
     		}
+
+    		if (/*set*/ ctx[1] === undefined && !('set' in props)) {
+    			console_1.warn("<ValidatorModal> was created without expected prop 'set'");
+    		}
     	}
 
     	get validator() {
@@ -21972,6 +22037,14 @@ var app = (function () {
     	}
 
     	set validator(value) {
+    		throw new Error("<ValidatorModal>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get set() {
+    		throw new Error("<ValidatorModal>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set set(value) {
     		throw new Error("<ValidatorModal>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -22714,7 +22787,10 @@ var app = (function () {
     	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
     	validatormodal = new ValidatorModal({
-    			props: { validator: /*selectedVal*/ ctx[5] },
+    			props: {
+    				validator: /*selectedVal*/ ctx[5],
+    				set: /*set*/ ctx[1]
+    			},
     			$$inline: true
     		});
 
@@ -22844,6 +22920,7 @@ var app = (function () {
 
     			const validatormodal_changes = {};
     			if (dirty & /*selectedVal*/ 32) validatormodal_changes.validator = /*selectedVal*/ ctx[5];
+    			if (dirty & /*set*/ 2) validatormodal_changes.set = /*set*/ ctx[1];
     			validatormodal.$set(validatormodal_changes);
     		},
     		i: function intro(local) {

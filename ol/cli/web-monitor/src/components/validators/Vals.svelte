@@ -115,5 +115,5 @@
     <!--Network-->
     <Network {data}/>
   {/if}
-  <ValidatorModal validator={selectedVal} />
+  <ValidatorModal validator={selectedVal} {set} />
 </main>

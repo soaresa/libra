@@ -3,6 +3,7 @@
     import ValidatorVouch from "./ValidatorVouch.svelte";
 
     export let validator;
+    export let set; // temporary
 
     console.log(validator);
 
@@ -82,7 +83,7 @@
                     </tr>
                 </tbody>
             </table>
-            <ValidatorVouch validator={validator} />
+            <ValidatorVouch validator={validator} {set} />
             <AutoPay account={validator}/>
         </div>
     {/if}
