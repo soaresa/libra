@@ -11,17 +11,26 @@ export let data;
 		// create nodes and links
     let nodes = [];
     let links = [];
+    let active = [];
+    // build nodes
     data.chain_view.validator_view.forEach(val => {
       nodes.push({
         id: val.account_address.toLowerCase(),
         group: 1
       })
+      active.push(val.account_address.toLowerCase())
+    })
+
+    //build links
+    data.chain_view.validator_view.forEach(val => {
       val.vouch.vals.forEach(vouch => {
-        links.push({
-          source: val.account_address.toLowerCase(), 
-          target: vouch.address.toLowerCase(), 
-          value: 1
-        })
+        if (active.indexOf(vouch.address.toLowerCase())) {
+          links.push({
+            source: val.account_address.toLowerCase(), 
+            target: vouch.address.toLowerCase(), 
+            value: 1
+          })
+        }
       })
     })
     graph = {nodes: nodes, links: links};

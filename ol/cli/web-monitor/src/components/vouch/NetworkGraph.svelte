@@ -253,7 +253,6 @@
       context.stroke();
       context.fillStyle = groupColour(context, d);
       context.fill();
-      console.log(">>> d.size: " + d.size)
       // if (d.size > max / 50) {
         context.fillStyle = "grey";
         d.id
