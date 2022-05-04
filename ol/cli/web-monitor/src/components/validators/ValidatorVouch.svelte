@@ -2,6 +2,7 @@
   import { afterUpdate } from "svelte";
 
   export let validator;
+  export let set; // temporary
   
   let vouches;
   afterUpdate(() => {
@@ -11,15 +12,16 @@
 
     // build vouch table data
     vouches = validator.vouch.received.map(each => {
+      let isSent = set.find(x => x.account_address == each.address.toUpperCase())
       return {
         note: each.note,
         address: each.address,
-        is_sent: false,
+        is_sent: isSent == null ? null : false,
         is_received: true
       }
     })
     validator.vouch.sent.forEach(each => {
-      let sent = vouches.find(received => received.address == each.address)
+      let sent = vouches.find(received => received.address == each.address) 
       if (sent) {
         sent.is_sent = true;
       } else {
@@ -60,7 +62,9 @@
               {/if}
             </td>
             <td>
-              {#if vouch.is_sent}
+              {#if vouch.is_sent == null}
+                ???
+              {:else if vouch.is_sent}
                 <span class="uk-text-success" uk-icon="icon: check"></span>
               {/if}
             </td>
