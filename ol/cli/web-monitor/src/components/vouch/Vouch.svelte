@@ -23,7 +23,7 @@ export let data;
 
     //build links
     data.chain_view.validator_view.forEach(val => {
-      val.vouch.vals.forEach(vouch => {
+      val.vouch.received.forEach(vouch => {
         if (active.indexOf(vouch.address.toLowerCase())) {
           links.push({
             source: val.account_address.toLowerCase(), 

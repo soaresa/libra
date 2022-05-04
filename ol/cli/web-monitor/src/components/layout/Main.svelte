@@ -6,14 +6,36 @@
   import AutoPay from "../autopay/AutoPay.svelte";
   import WatchList from "../watch-list/WatchList.svelte";
   import AuditVals from "../audit/AuditVals.svelte";
+  import Vouch from "../vouch/Vouch.svelte";
   import { onDestroy } from 'svelte';
   import { chainInfo } from "../../store.ts";
-import Vouch from "../vouch/Vouch.svelte";
 
   let data;
   
   const unsubscribe = chainInfo.subscribe((info_str) => {
     data = JSON.parse(info_str);
+
+    if (!data.chain_view || !data.chain_view.validator_view) {
+      return;
+    }
+
+    /* map vouch sent */
+    let senders = {};
+    data.chain_view.validator_view.forEach(receiver => {
+      receiver.vouch.received.forEach(sender => {
+        let receivers = senders[sender.address] || [];
+        receivers.push({
+          address: receiver.account_address.toLowerCase(),
+          note: receiver.note
+        })
+        senders[sender.address] = receivers
+      })
+    });
+
+    /* set vouch sender */
+    data.chain_view.validator_view.forEach(val => {
+      val.vouch.sent = senders[val.account_address.toLowerCase()] || [];
+    });
   });
   
   onDestroy(unsubscribe);

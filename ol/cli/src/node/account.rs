@@ -138,7 +138,7 @@ impl Node {
     /// Enrich vouches with notes from dictionary file
     fn enrich_note_vouch(&self, mut vouch: VouchView) -> VouchView {
         let dic = self.load_account_dictionary();
-        for val in vouch.vals.iter_mut()  {
+        for val in vouch.received.iter_mut()  {
             val.note = Some(dic.get_note_for_address(val.address));
         }        
         vouch

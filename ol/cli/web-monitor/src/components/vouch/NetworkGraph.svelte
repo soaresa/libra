@@ -73,13 +73,13 @@
     let radgrad = context.createRadialGradient(
       d.x,
       d.y,
-      nodesize / 3,
+      nodesize,
       d.x,
       d.y,
       nodesize
     );
-    radgrad.addColorStop(0, "#01abfc");
-    radgrad.addColorStop(0.1, "#01abfc");
+    // radgrad.addColorStop(0, "#01abfc");
+    // radgrad.addColorStop(0.1, "#01abfc");
     radgrad.addColorStop(1, "#01abfc00");
 
     let radgrad2 = context.createRadialGradient(

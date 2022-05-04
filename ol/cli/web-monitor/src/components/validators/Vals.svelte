@@ -4,7 +4,6 @@
   import ValidatorModal from "./ValidatorModal.svelte";
   export let data;
 
-  const modal_id = "vals-tab-val-modal";
   let view = "Chain";
   interface ValInfo {
     note: String;
@@ -39,10 +38,6 @@
   $: if (data.chain_view && data.chain_view.validator_view) {
     set = data.chain_view.validator_view;
     has_notes = set.some(e => e.note != "");
-    if (selectedVal == null) {
-      // initial selection
-      selectedVal = set[0];
-    }
   }
   $: set = set.sort((a, b) => (a[sortOption] > b[sortOption]) ? sortOrder : -sortOrder);
   
@@ -97,7 +92,7 @@
         </thead>
         <tbody>
           {#each set as val, i}
-          <tr class="{val.account_address === data.account_view.address ? 'owner' : ''}" on:click={() => selectedVal = val}>        
+            <tr class="{val.account_address === data.account_view.address ? 'owner' : ''}" on:click={() => selectedVal = val}>
               {#if has_notes}
                 <td class="uk-text-center">{val.note}</td>
               {/if}
@@ -109,7 +104,7 @@
               <td class="uk-text-right">{val.vote_count_in_epoch}</td>
               <td class="uk-text-right">{val.prop_count_in_epoch}</td>
               <td>
-                <span uk-icon="icon: info" uk-toggle="target: #{modal_id}"></span>
+                <span uk-icon="icon: info" uk-toggle="target: #val-modal"></span>
               </td>
             </tr>
           {/each}
@@ -119,7 +114,6 @@
   {:else} 
     <!--Network-->
     <Network {data}/>
-
   {/if}
-  <ValidatorModal validator={selectedVal} id={modal_id}></ValidatorModal>
+  <ValidatorModal validator={selectedVal} />
 </main>

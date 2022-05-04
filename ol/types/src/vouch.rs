@@ -34,7 +34,7 @@ pub struct AccountVouchedView {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VouchView {
   ///
-  pub vals: Vec<AccountVouchedView>,
+  pub received: Vec<AccountVouchedView>,
 }
 
 impl MoveStructType for VouchResource {
@@ -74,7 +74,7 @@ impl VouchResource {
   ///
   pub fn get_view(&self) -> VouchView {
     VouchView { 
-      vals: self.vals
+      received: self.vals
         .iter()
         .map(|address| AccountVouchedView {
           address: address.clone(),

@@ -9,7 +9,7 @@ use diem_types::{
 };
 use ol_types::{
     autopay::AutoPayView,
-    vouch::VouchView,
+    vouch::{VouchView, AccountVouchedView},
     validator_config::ValidatorConfigView
 };
 
@@ -189,7 +189,7 @@ impl Node {
             let dict = self.load_account_dictionary();
 
             // Fetch and format all data for each Validator
-            let validators: Vec<ValidatorView> = validator_set
+            let mut validators: Vec<ValidatorView> = validator_set
                 .payload()
                 .iter()
                 .filter_map(|v| self.format_validator_info(v, &dict, &validators_stats).ok())
@@ -359,3 +359,4 @@ fn extract_ip(full_ip: &String) -> String {
         None => full_ip.to_string()
     }
 }
+

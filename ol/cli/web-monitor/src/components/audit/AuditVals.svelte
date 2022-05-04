@@ -71,7 +71,7 @@
                                 {/if}
                             </td>
                             <td class="uk-text-center">
-                                <span uk-icon="icon: info" uk-toggle="target: #{modal_id}"></span>
+                                <span uk-icon="icon: info" uk-toggle="target: #val-modal"></span>
                             </td>
                         </tr>
                     {/each}                
@@ -81,5 +81,5 @@
     {:else}
         loading...
     {/if}
-    <ValidatorModal validator={selected_val} id={modal_id}></ValidatorModal>
+    <ValidatorModal validator={selected_val}></ValidatorModal>
 </div>
