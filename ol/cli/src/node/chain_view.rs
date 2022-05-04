@@ -7,7 +7,11 @@ use diem_types::{
     ol_validators_stats::ValidatorsStatsResource, validator_info::ValidatorInfo,
     waypoint::Waypoint,
 };
-use ol_types::{autopay::AutoPayView, validator_config::ValidatorConfigView};
+use ol_types::{
+    autopay::AutoPayView,
+    vouch::VouchView,
+    validator_config::ValidatorConfigView
+};
 
 use super::{node::Node, dictionary::AccountDictionary, autopay_view::PayeeStats};
 use serde::{Deserialize, Serialize};
@@ -92,6 +96,8 @@ pub struct ValidatorView {
     pub validator_config: Option<ValidatorConfigView>,
     /// autopay instructions
     pub autopay: Option<AutoPayView>,
+    /// vals vouched
+    pub vouch: Option<VouchView>,
     /// note
     pub note: String,
 }
@@ -195,6 +201,9 @@ impl Node {
             cs.autopay_watch_list =  self.get_autopay_watch_list(validators.clone());
             cs.upgrade = self.client.get_oracle_upgrade_state()?;
 
+            // println!(">>> validators set: {:?}", validator_set);
+            // println!(">>> validator_set.payload(): {:?}", validator_set.payload());
+
             self.vitals.chain_view = Some(cs.clone());
 
             return Ok((cs, validators));
@@ -239,13 +248,19 @@ impl Node {
 
         let validator_ip = extract_ip(&validator_full_ip);
 
+        
         let ms  = self.client.get_miner_state(&v.account_address().clone())?.unwrap();
 
         let one_val_stat = stats.get_validator_current_stats(v.account_address().clone())?;
 
         let val_config = self.get_validator_config(v.account_address().clone())?;
 
-        let autopay = self.get_autopay_view(v.account_address().clone())?;
+        let autopay = match self.get_autopay_view(v.account_address().clone()) {
+            Ok(ap) => Some(ap),
+            Err(_) => None
+        };
+
+        let vouch = self.get_vouch(v.account_address().clone())?;
 
         let ports = get_ports_status(&validator_ip);
 
@@ -269,7 +284,8 @@ impl Node {
             vote_count_in_epoch: one_val_stat.vote_count,
             prop_count_in_epoch: one_val_stat.prop_count,
             validator_config: Some(val_config),
-            autopay: Some(autopay),
+            autopay: autopay,
+            vouch: Some(vouch),
             note: dict.get_note_for_address(*v.account_address()),
         })
     }

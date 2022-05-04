@@ -5,7 +5,8 @@ use anyhow::{Error, Result, bail};
 use diem_json_rpc_client::{views::{AccountView, EventView}, AccountAddress};
 use diem_types::{account_state::AccountState, event::{EventHandle, EventKey}, transaction::Version};
 use ol_types::{
-    autopay::{AutoPayResource, AutoPayView}, 
+    autopay::{AutoPayResource, AutoPayView},
+    vouch::{VouchResource, VouchView},
     validator_config::{ValidatorConfigResource, ValidatorConfigView}
 };
 use resource_viewer::{AnnotatedAccountStateBlob, MoveValueAnnotator, NullStateView};
@@ -113,6 +114,18 @@ impl Node {
       
     }
 
+    /// Get account vouch
+    pub fn get_vouch(&self, account: AccountAddress) -> Result<VouchView, Error> {
+        let state = self.get_account_state(account)?;
+         match state.get_resource_impl::<VouchResource>(
+                VouchResource::resource_path().as_slice()
+            ) {
+                Ok(Some(res)) => Ok(self.enrich_note_vouch(res.get_view())),
+                _ => bail!("cannot get vouch view")
+            }
+      
+    }
+
     /// Enrich with notes from dictionary file
     fn enrich_note(&self, mut autopay: AutoPayView) -> AutoPayView {
         let dic = self.load_account_dictionary();
@@ -120,6 +133,15 @@ impl Node {
             payment.note = Some(dic.get_note_for_address(payment.payee));
         }        
         autopay
+    }
+
+    /// Enrich vouches with notes from dictionary file
+    fn enrich_note_vouch(&self, mut vouch: VouchView) -> VouchView {
+        let dic = self.load_account_dictionary();
+        for val in vouch.vals.iter_mut()  {
+            val.note = Some(dic.get_note_for_address(val.address));
+        }        
+        vouch
     }
 
     /// Get validator config view
