@@ -40,10 +40,14 @@
           {/if}
           {#if has_grafana}
             <td class="uk-text-center">
-              <span 
-                uk-icon="icon: {val.has_grafana ? "check" : "close"}"
-                class="{val.has_grafana ? "uk-text-success" : "uk-text-danger"}"
-              ></span>
+              {#if val.has_grafana == null}
+                ???
+              {:else}
+                <span 
+                  uk-icon="icon: {val.has_grafana ? "check" : "close"}"
+                  class="{val.has_grafana ? "uk-text-success" : "uk-text-danger"}"
+                ></span>
+              {/if}
             </td>
           {/if}
           <td class="uk-visible@s uk-text-center">{val.account_address}</td>
