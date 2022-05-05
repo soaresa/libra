@@ -60,7 +60,7 @@
     d.size = Math.pow(graph.links
       .filter((link) => link.source == d.id || link.target == d.id)
       .map((link) => link.value)
-      .reduce((a, b) => a + b), 2);
+      .reduce((a, b) => {a + b}), 2);
     if (d.id == "You") {
       max = d.size;
       d.details.messages = max;

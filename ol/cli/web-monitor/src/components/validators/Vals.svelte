@@ -56,6 +56,7 @@
 </style>
 
 <main uk-height-viewport="expand: true">
+  <ValidatorModal validator={selectedVal} set={set} />
   <h2 class="uk-text-center uk-text-uppercase uk-text-muted uk-text-light uk-margin-medium-bottom">
     <span>{set.length} Validators {#if !has_notes}<AddressNoteTip />{/if}</span>
   </h2>
@@ -104,7 +105,7 @@
               <td class="uk-text-right">{val.vote_count_in_epoch}</td>
               <td class="uk-text-right">{val.prop_count_in_epoch}</td>
               <td>
-                <span uk-icon="icon: info" uk-toggle="target: #val-modal"></span>
+                <span uk-icon="icon: info" uk-toggle="target: #valModal"></span>
               </td>
             </tr>
           {/each}
@@ -115,5 +116,4 @@
     <!--Network-->
     <Network {data}/>
   {/if}
-  <ValidatorModal validator={selectedVal} {set} />
 </main>

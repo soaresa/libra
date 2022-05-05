@@ -19348,24 +19348,24 @@ var app = (function () {
 
     function get_each_context$8(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[4] = list[i];
+    	child_ctx[5] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_1$3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[7] = list[i];
+    	child_ctx[8] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[7] = list[i];
+    	child_ctx[8] = list[i];
     	return child_ctx;
     }
 
-    // (17:8) {#if has_notes}
-    function create_if_block_1$7(ctx) {
+    // (19:8) {#if has_notes}
+    function create_if_block_3$5(ctx) {
     	let th;
 
     	const block = {
@@ -19373,7 +19373,7 @@ var app = (function () {
     			th = element("th");
     			th.textContent = "note";
     			attr_dev(th, "class", "uk-text-center");
-    			add_location(th, file$e, 17, 10, 513);
+    			add_location(th, file$e, 19, 10, 594);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
@@ -19385,20 +19385,50 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$7.name,
+    		id: create_if_block_3$5.name,
     		type: "if",
-    		source: "(17:8) {#if has_notes}",
+    		source: "(19:8) {#if has_notes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (23:8) {#each ports as port}
+    // (22:8) {#if has_grafana}
+    function create_if_block_2$6(ctx) {
+    	let th;
+
+    	const block = {
+    		c: function create() {
+    			th = element("th");
+    			th.textContent = "grafana";
+    			attr_dev(th, "class", "uk-text-center");
+    			add_location(th, file$e, 22, 10, 681);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, th, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(th);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2$6.name,
+    		type: "if",
+    		source: "(22:8) {#if has_grafana}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (28:8) {#each ports as port}
     function create_each_block_2(ctx) {
     	let th;
     	let t0;
-    	let t1_value = /*port*/ ctx[7] + "";
+    	let t1_value = /*port*/ ctx[8] + "";
     	let t1;
 
     	const block = {
@@ -19407,7 +19437,7 @@ var app = (function () {
     			t0 = text("val port ");
     			t1 = text(t1_value);
     			attr_dev(th, "class", "uk-text-center");
-    			add_location(th, file$e, 23, 10, 742);
+    			add_location(th, file$e, 28, 10, 913);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
@@ -19415,7 +19445,7 @@ var app = (function () {
     			append_dev(th, t1);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*ports*/ 2 && t1_value !== (t1_value = /*port*/ ctx[7] + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*ports*/ 2 && t1_value !== (t1_value = /*port*/ ctx[8] + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(th);
@@ -19426,17 +19456,17 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(23:8) {#each ports as port}",
+    		source: "(28:8) {#each ports as port}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (31:10) {#if has_notes}
-    function create_if_block$a(ctx) {
+    // (36:10) {#if has_notes}
+    function create_if_block_1$7(ctx) {
     	let td;
-    	let t_value = /*val*/ ctx[4].note + "";
+    	let t_value = /*val*/ ctx[5].note + "";
     	let t;
 
     	const block = {
@@ -19444,14 +19474,66 @@ var app = (function () {
     			td = element("td");
     			t = text(t_value);
     			attr_dev(td, "class", "uk-text-center");
-    			add_location(td, file$e, 31, 12, 919);
+    			add_location(td, file$e, 36, 12, 1090);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, td, anchor);
     			append_dev(td, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*set*/ 1 && t_value !== (t_value = /*val*/ ctx[4].note + "")) set_data_dev(t, t_value);
+    			if (dirty & /*set*/ 1 && t_value !== (t_value = /*val*/ ctx[5].note + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(td);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1$7.name,
+    		type: "if",
+    		source: "(36:10) {#if has_notes}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (39:10) {#if has_grafana}
+    function create_if_block$a(ctx) {
+    	let td;
+    	let span;
+    	let span_uk_icon_value;
+    	let span_class_value;
+
+    	const block = {
+    		c: function create() {
+    			td = element("td");
+    			span = element("span");
+    			attr_dev(span, "uk-icon", span_uk_icon_value = "icon: " + (/*val*/ ctx[5].has_grafana ? "check" : "close"));
+
+    			attr_dev(span, "class", span_class_value = /*val*/ ctx[5].has_grafana
+    			? "uk-text-success"
+    			: "uk-text-danger");
+
+    			add_location(span, file$e, 40, 14, 1231);
+    			attr_dev(td, "class", "uk-text-center");
+    			add_location(td, file$e, 39, 12, 1189);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, td, anchor);
+    			append_dev(td, span);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*set*/ 1 && span_uk_icon_value !== (span_uk_icon_value = "icon: " + (/*val*/ ctx[5].has_grafana ? "check" : "close"))) {
+    				attr_dev(span, "uk-icon", span_uk_icon_value);
+    			}
+
+    			if (dirty & /*set*/ 1 && span_class_value !== (span_class_value = /*val*/ ctx[5].has_grafana
+    			? "uk-text-success"
+    			: "uk-text-danger")) {
+    				attr_dev(span, "class", span_class_value);
+    			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(td);
@@ -19462,14 +19544,14 @@ var app = (function () {
     		block,
     		id: create_if_block$a.name,
     		type: "if",
-    		source: "(31:10) {#if has_notes}",
+    		source: "(39:10) {#if has_grafana}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (38:10) {#each ports as port}
+    // (51:10) {#each ports as port}
     function create_each_block_1$3(ctx) {
     	let td;
     	let span;
@@ -19481,30 +19563,30 @@ var app = (function () {
     			td = element("td");
     			span = element("span");
 
-    			attr_dev(span, "uk-icon", span_uk_icon_value = "icon: " + (/*val*/ ctx[4].ports_status[/*port*/ ctx[7]]
+    			attr_dev(span, "uk-icon", span_uk_icon_value = "icon: " + (/*val*/ ctx[5].ports_status[/*port*/ ctx[8]]
     			? "check"
     			: "close"));
 
-    			attr_dev(span, "class", span_class_value = /*val*/ ctx[4].ports_status[/*port*/ ctx[7]]
+    			attr_dev(span, "class", span_class_value = /*val*/ ctx[5].ports_status[/*port*/ ctx[8]]
     			? "uk-text-success"
     			: "uk-text-danger");
 
-    			add_location(span, file$e, 39, 14, 1289);
+    			add_location(span, file$e, 52, 14, 1757);
     			attr_dev(td, "class", "uk-text-center");
-    			add_location(td, file$e, 38, 12, 1247);
+    			add_location(td, file$e, 51, 12, 1715);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, td, anchor);
     			append_dev(td, span);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*set, ports*/ 3 && span_uk_icon_value !== (span_uk_icon_value = "icon: " + (/*val*/ ctx[4].ports_status[/*port*/ ctx[7]]
+    			if (dirty & /*set, ports*/ 3 && span_uk_icon_value !== (span_uk_icon_value = "icon: " + (/*val*/ ctx[5].ports_status[/*port*/ ctx[8]]
     			? "check"
     			: "close"))) {
     				attr_dev(span, "uk-icon", span_uk_icon_value);
     			}
 
-    			if (dirty & /*set, ports*/ 3 && span_class_value !== (span_class_value = /*val*/ ctx[4].ports_status[/*port*/ ctx[7]]
+    			if (dirty & /*set, ports*/ 3 && span_class_value !== (span_class_value = /*val*/ ctx[5].ports_status[/*port*/ ctx[8]]
     			? "uk-text-success"
     			: "uk-text-danger")) {
     				attr_dev(span, "class", span_class_value);
@@ -19519,35 +19601,37 @@ var app = (function () {
     		block,
     		id: create_each_block_1$3.name,
     		type: "each",
-    		source: "(38:10) {#each ports as port}",
+    		source: "(51:10) {#each ports as port}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (29:6) {#each set as val}
+    // (34:6) {#each set as val}
     function create_each_block$8(ctx) {
     	let tr;
     	let t0;
-    	let td0;
-    	let t1_value = /*val*/ ctx[4].account_address + "";
     	let t1;
+    	let td0;
+    	let t2_value = /*val*/ ctx[5].account_address + "";
     	let t2;
-    	let td1;
-    	let t3_value = /*val*/ ctx[4].account_address + "";
     	let t3;
+    	let td1;
+    	let t4_value = /*val*/ ctx[5].account_address + "";
     	let t4;
-    	let td2;
-    	let t5_value = /*val*/ ctx[4].validator_ip + "";
     	let t5;
+    	let td2;
+    	let t6_value = /*val*/ ctx[5].validator_ip + "";
     	let t6;
-    	let td3;
-    	let t7_value = /*val*/ ctx[4].vfn_ip + "";
     	let t7;
+    	let td3;
+    	let t8_value = /*val*/ ctx[5].vfn_ip + "";
     	let t8;
     	let t9;
-    	let if_block = /*has_notes*/ ctx[2] && create_if_block$a(ctx);
+    	let t10;
+    	let if_block0 = /*has_notes*/ ctx[2] && create_if_block_1$7(ctx);
+    	let if_block1 = /*has_grafana*/ ctx[3] && create_if_block$a(ctx);
     	let each_value_1 = /*ports*/ ctx[1];
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
@@ -19559,75 +19643,92 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			tr = element("tr");
-    			if (if_block) if_block.c();
+    			if (if_block0) if_block0.c();
     			t0 = space();
+    			if (if_block1) if_block1.c();
+    			t1 = space();
     			td0 = element("td");
-    			t1 = text(t1_value);
-    			t2 = space();
+    			t2 = text(t2_value);
+    			t3 = space();
     			td1 = element("td");
-    			t3 = text(t3_value);
-    			t4 = space();
+    			t4 = text(t4_value);
+    			t5 = space();
     			td2 = element("td");
-    			t5 = text(t5_value);
-    			t6 = space();
+    			t6 = text(t6_value);
+    			t7 = space();
     			td3 = element("td");
-    			t7 = text(t7_value);
-    			t8 = space();
+    			t8 = text(t8_value);
+    			t9 = space();
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t9 = space();
+    			t10 = space();
     			attr_dev(td0, "class", "uk-visible@s uk-text-center");
-    			add_location(td0, file$e, 33, 10, 988);
+    			add_location(td0, file$e, 46, 10, 1456);
     			attr_dev(td1, "class", "uk-hidden@s uk-text-truncate");
-    			add_location(td1, file$e, 34, 10, 1065);
-    			add_location(td2, file$e, 35, 10, 1143);
-    			add_location(td3, file$e, 36, 10, 1181);
-    			add_location(tr, file$e, 29, 8, 876);
+    			add_location(td1, file$e, 47, 10, 1533);
+    			add_location(td2, file$e, 48, 10, 1611);
+    			add_location(td3, file$e, 49, 10, 1649);
+    			add_location(tr, file$e, 34, 8, 1047);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
-    			if (if_block) if_block.m(tr, null);
+    			if (if_block0) if_block0.m(tr, null);
     			append_dev(tr, t0);
+    			if (if_block1) if_block1.m(tr, null);
+    			append_dev(tr, t1);
     			append_dev(tr, td0);
-    			append_dev(td0, t1);
-    			append_dev(tr, t2);
+    			append_dev(td0, t2);
+    			append_dev(tr, t3);
     			append_dev(tr, td1);
-    			append_dev(td1, t3);
-    			append_dev(tr, t4);
+    			append_dev(td1, t4);
+    			append_dev(tr, t5);
     			append_dev(tr, td2);
-    			append_dev(td2, t5);
-    			append_dev(tr, t6);
+    			append_dev(td2, t6);
+    			append_dev(tr, t7);
     			append_dev(tr, td3);
-    			append_dev(td3, t7);
-    			append_dev(tr, t8);
+    			append_dev(td3, t8);
+    			append_dev(tr, t9);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(tr, null);
     			}
 
-    			append_dev(tr, t9);
+    			append_dev(tr, t10);
     		},
     		p: function update(ctx, dirty) {
     			if (/*has_notes*/ ctx[2]) {
-    				if (if_block) {
-    					if_block.p(ctx, dirty);
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
     				} else {
-    					if_block = create_if_block$a(ctx);
-    					if_block.c();
-    					if_block.m(tr, t0);
+    					if_block0 = create_if_block_1$7(ctx);
+    					if_block0.c();
+    					if_block0.m(tr, t0);
     				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
     			}
 
-    			if (dirty & /*set*/ 1 && t1_value !== (t1_value = /*val*/ ctx[4].account_address + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*set*/ 1 && t3_value !== (t3_value = /*val*/ ctx[4].account_address + "")) set_data_dev(t3, t3_value);
-    			if (dirty & /*set*/ 1 && t5_value !== (t5_value = /*val*/ ctx[4].validator_ip + "")) set_data_dev(t5, t5_value);
-    			if (dirty & /*set*/ 1 && t7_value !== (t7_value = /*val*/ ctx[4].vfn_ip + "")) set_data_dev(t7, t7_value);
+    			if (/*has_grafana*/ ctx[3]) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block$a(ctx);
+    					if_block1.c();
+    					if_block1.m(tr, t1);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+
+    			if (dirty & /*set*/ 1 && t2_value !== (t2_value = /*val*/ ctx[5].account_address + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*set*/ 1 && t4_value !== (t4_value = /*val*/ ctx[5].account_address + "")) set_data_dev(t4, t4_value);
+    			if (dirty & /*set*/ 1 && t6_value !== (t6_value = /*val*/ ctx[5].validator_ip + "")) set_data_dev(t6, t6_value);
+    			if (dirty & /*set*/ 1 && t8_value !== (t8_value = /*val*/ ctx[5].vfn_ip + "")) set_data_dev(t8, t8_value);
 
     			if (dirty & /*set, ports*/ 3) {
     				each_value_1 = /*ports*/ ctx[1];
@@ -19642,7 +19743,7 @@ var app = (function () {
     					} else {
     						each_blocks[i] = create_each_block_1$3(child_ctx);
     						each_blocks[i].c();
-    						each_blocks[i].m(tr, t9);
+    						each_blocks[i].m(tr, t10);
     					}
     				}
 
@@ -19655,7 +19756,8 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(tr);
-    			if (if_block) if_block.d();
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
     			destroy_each(each_blocks, detaching);
     		}
     	};
@@ -19664,7 +19766,7 @@ var app = (function () {
     		block,
     		id: create_each_block$8.name,
     		type: "each",
-    		source: "(29:6) {#each set as val}",
+    		source: "(34:6) {#each set as val}",
     		ctx
     	});
 
@@ -19677,15 +19779,17 @@ var app = (function () {
     	let thead;
     	let tr;
     	let t0;
+    	let t1;
     	let th0;
-    	let t2;
+    	let t3;
     	let th1;
-    	let t4;
+    	let t5;
     	let th2;
-    	let t6;
     	let t7;
+    	let t8;
     	let tbody;
-    	let if_block = /*has_notes*/ ctx[2] && create_if_block_1$7(ctx);
+    	let if_block0 = /*has_notes*/ ctx[2] && create_if_block_3$5(ctx);
+    	let if_block1 = /*has_grafana*/ ctx[3] && create_if_block_2$6(ctx);
     	let each_value_2 = /*ports*/ ctx[1];
     	validate_each_argument(each_value_2);
     	let each_blocks_1 = [];
@@ -19708,23 +19812,25 @@ var app = (function () {
     			table = element("table");
     			thead = element("thead");
     			tr = element("tr");
-    			if (if_block) if_block.c();
+    			if (if_block0) if_block0.c();
     			t0 = space();
+    			if (if_block1) if_block1.c();
+    			t1 = space();
     			th0 = element("th");
     			th0.textContent = "account";
-    			t2 = space();
+    			t3 = space();
     			th1 = element("th");
     			th1.textContent = "val ip";
-    			t4 = space();
+    			t5 = space();
     			th2 = element("th");
     			th2.textContent = "vfn ip";
-    			t6 = space();
+    			t7 = space();
 
     			for (let i = 0; i < each_blocks_1.length; i += 1) {
     				each_blocks_1[i].c();
     			}
 
-    			t7 = space();
+    			t8 = space();
     			tbody = element("tbody");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -19732,17 +19838,17 @@ var app = (function () {
     			}
 
     			attr_dev(th0, "class", "uk-text-center");
-    			add_location(th0, file$e, 19, 8, 572);
+    			add_location(th0, file$e, 24, 8, 743);
     			attr_dev(th1, "class", "uk-text-left");
-    			add_location(th1, file$e, 20, 8, 620);
+    			add_location(th1, file$e, 25, 8, 791);
     			attr_dev(th2, "class", "uk-text-left");
-    			add_location(th2, file$e, 21, 8, 665);
-    			add_location(tr, file$e, 15, 6, 474);
-    			add_location(thead, file$e, 14, 4, 460);
-    			add_location(tbody, file$e, 27, 4, 835);
+    			add_location(th2, file$e, 26, 8, 836);
+    			add_location(tr, file$e, 17, 6, 555);
+    			add_location(thead, file$e, 16, 4, 541);
+    			add_location(tbody, file$e, 32, 4, 1006);
     			attr_dev(table, "class", "uk-table uk-table-hover uk-text-muted");
-    			add_location(table, file$e, 13, 2, 402);
-    			add_location(main, file$e, 12, 0, 393);
+    			add_location(table, file$e, 15, 2, 483);
+    			add_location(main, file$e, 14, 0, 474);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -19752,20 +19858,22 @@ var app = (function () {
     			append_dev(main, table);
     			append_dev(table, thead);
     			append_dev(thead, tr);
-    			if (if_block) if_block.m(tr, null);
+    			if (if_block0) if_block0.m(tr, null);
     			append_dev(tr, t0);
+    			if (if_block1) if_block1.m(tr, null);
+    			append_dev(tr, t1);
     			append_dev(tr, th0);
-    			append_dev(tr, t2);
+    			append_dev(tr, t3);
     			append_dev(tr, th1);
-    			append_dev(tr, t4);
+    			append_dev(tr, t5);
     			append_dev(tr, th2);
-    			append_dev(tr, t6);
+    			append_dev(tr, t7);
 
     			for (let i = 0; i < each_blocks_1.length; i += 1) {
     				each_blocks_1[i].m(tr, null);
     			}
 
-    			append_dev(table, t7);
+    			append_dev(table, t8);
     			append_dev(table, tbody);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -19774,14 +19882,25 @@ var app = (function () {
     		},
     		p: function update(ctx, [dirty]) {
     			if (/*has_notes*/ ctx[2]) {
-    				if (if_block) ; else {
-    					if_block = create_if_block_1$7(ctx);
-    					if_block.c();
-    					if_block.m(tr, t0);
+    				if (if_block0) ; else {
+    					if_block0 = create_if_block_3$5(ctx);
+    					if_block0.c();
+    					if_block0.m(tr, t0);
     				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (/*has_grafana*/ ctx[3]) {
+    				if (if_block1) ; else {
+    					if_block1 = create_if_block_2$6(ctx);
+    					if_block1.c();
+    					if_block1.m(tr, t1);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
     			}
 
     			if (dirty & /*ports*/ 2) {
@@ -19808,7 +19927,7 @@ var app = (function () {
     				each_blocks_1.length = each_value_2.length;
     			}
 
-    			if (dirty & /*ports, set, has_notes*/ 7) {
+    			if (dirty & /*ports, set, has_grafana, has_notes*/ 15) {
     				each_value = /*set*/ ctx[0];
     				validate_each_argument(each_value);
     				let i;
@@ -19836,7 +19955,8 @@ var app = (function () {
     		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
-    			if (if_block) if_block.d();
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
     			destroy_each(each_blocks_1, detaching);
     			destroy_each(each_blocks, detaching);
     		}
@@ -19860,6 +19980,7 @@ var app = (function () {
     	let ports = [];
     	let set = [];
     	let has_notes = false;
+    	let has_grafana = false;
     	const writable_props = ['data'];
 
     	Object_1$2.keys($$props).forEach(key => {
@@ -19867,16 +19988,17 @@ var app = (function () {
     	});
 
     	$$self.$$set = $$props => {
-    		if ('data' in $$props) $$invalidate(3, data = $$props.data);
+    		if ('data' in $$props) $$invalidate(4, data = $$props.data);
     	};
 
-    	$$self.$capture_state = () => ({ data, ports, set, has_notes });
+    	$$self.$capture_state = () => ({ data, ports, set, has_notes, has_grafana });
 
     	$$self.$inject_state = $$props => {
-    		if ('data' in $$props) $$invalidate(3, data = $$props.data);
+    		if ('data' in $$props) $$invalidate(4, data = $$props.data);
     		if ('ports' in $$props) $$invalidate(1, ports = $$props.ports);
     		if ('set' in $$props) $$invalidate(0, set = $$props.set);
     		if ('has_notes' in $$props) $$invalidate(2, has_notes = $$props.has_notes);
+    		if ('has_grafana' in $$props) $$invalidate(3, has_grafana = $$props.has_grafana);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -19884,22 +20006,23 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*data, set*/ 9) {
+    		if ($$self.$$.dirty & /*data, set*/ 17) {
     			if (data.chain_view && data.chain_view.validator_view) {
     				$$invalidate(0, set = data.chain_view.validator_view.sort((a, b) => a.ports_status[6180] > b.ports_status[6180] ? -1 : 1));
     				$$invalidate(2, has_notes = set.some(e => e.note != ""));
+    				$$invalidate(3, has_grafana = set.some(e => e.has_grafana != null));
     				$$invalidate(1, ports = set.length > 0 ? Object.keys(set[0].ports_status) : []);
     			}
     		}
     	};
 
-    	return [set, ports, has_notes, data];
+    	return [set, ports, has_notes, has_grafana, data];
     }
 
     class Network extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init$1(this, options, instance$e, create_fragment$e, safe_not_equal, { data: 3 });
+    		init$1(this, options, instance$e, create_fragment$e, safe_not_equal, { data: 4 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -19911,7 +20034,7 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*data*/ ctx[3] === undefined && !('data' in props)) {
+    		if (/*data*/ ctx[4] === undefined && !('data' in props)) {
     			console.warn("<Network> was created without expected prop 'data'");
     		}
     	}
@@ -21010,6 +21133,7 @@ var app = (function () {
     function get_each_context$5(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[3] = list[i];
+    	child_ctx[5] = i;
     	return child_ctx;
     }
 
@@ -21077,6 +21201,8 @@ var app = (function () {
     	let t5;
     	let th3;
     	let t7;
+    	let th4;
+    	let t9;
     	let tbody;
     	let each_value = /*vouches*/ ctx[0];
     	validate_each_argument(each_value);
@@ -21092,17 +21218,20 @@ var app = (function () {
     			thead = element("thead");
     			tr = element("tr");
     			th0 = element("th");
-    			th0.textContent = "note";
+    			th0.textContent = "#";
     			t1 = space();
     			th1 = element("th");
-    			th1.textContent = "validator";
+    			th1.textContent = "note";
     			t3 = space();
     			th2 = element("th");
-    			th2.textContent = "received";
+    			th2.textContent = "validator";
     			t5 = space();
     			th3 = element("th");
-    			th3.textContent = "sent";
+    			th3.textContent = "received";
     			t7 = space();
+    			th4 = element("th");
+    			th4.textContent = "sent";
+    			t9 = space();
     			tbody = element("tbody");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -21110,12 +21239,13 @@ var app = (function () {
     			}
 
     			add_location(th0, file$b, 43, 10, 1146);
-    			add_location(th1, file$b, 44, 10, 1170);
-    			add_location(th2, file$b, 45, 10, 1199);
-    			add_location(th3, file$b, 46, 10, 1227);
+    			add_location(th1, file$b, 44, 10, 1167);
+    			add_location(th2, file$b, 45, 10, 1191);
+    			add_location(th3, file$b, 46, 10, 1220);
+    			add_location(th4, file$b, 47, 10, 1248);
     			add_location(tr, file$b, 42, 8, 1131);
     			add_location(thead, file$b, 41, 6, 1115);
-    			add_location(tbody, file$b, 49, 6, 1276);
+    			add_location(tbody, file$b, 50, 6, 1297);
     			attr_dev(table, "class", "uk-table");
     			add_location(table, file$b, 40, 4, 1084);
     		},
@@ -21130,7 +21260,9 @@ var app = (function () {
     			append_dev(tr, th2);
     			append_dev(tr, t5);
     			append_dev(tr, th3);
-    			append_dev(table, t7);
+    			append_dev(tr, t7);
+    			append_dev(tr, th4);
+    			append_dev(table, t9);
     			append_dev(table, tbody);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -21209,7 +21341,7 @@ var app = (function () {
     	return block;
     }
 
-    // (56:14) {#if vouch.is_received}
+    // (58:14) {#if vouch.is_received}
     function create_if_block_4$2(ctx) {
     	let span;
 
@@ -21218,7 +21350,7 @@ var app = (function () {
     			span = element("span");
     			attr_dev(span, "class", "uk-text-success");
     			attr_dev(span, "uk-icon", "icon: check");
-    			add_location(span, file$b, 56, 16, 1474);
+    			add_location(span, file$b, 58, 16, 1525);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -21232,14 +21364,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$2.name,
     		type: "if",
-    		source: "(56:14) {#if vouch.is_received}",
+    		source: "(58:14) {#if vouch.is_received}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:38) 
+    // (65:38) 
     function create_if_block_3$3(ctx) {
     	let span;
 
@@ -21248,7 +21380,7 @@ var app = (function () {
     			span = element("span");
     			attr_dev(span, "class", "uk-text-success");
     			attr_dev(span, "uk-icon", "icon: check");
-    			add_location(span, file$b, 63, 16, 1706);
+    			add_location(span, file$b, 65, 16, 1757);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -21262,14 +21394,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$3.name,
     		type: "if",
-    		source: "(63:38) ",
+    		source: "(65:38) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:14) {#if vouch.is_sent == null}
+    // (63:14) {#if vouch.is_sent == null}
     function create_if_block_2$4(ctx) {
     	let t;
 
@@ -21289,28 +21421,32 @@ var app = (function () {
     		block,
     		id: create_if_block_2$4.name,
     		type: "if",
-    		source: "(61:14) {#if vouch.is_sent == null}",
+    		source: "(63:14) {#if vouch.is_sent == null}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (51:8) {#each vouches as vouch}
+    // (52:8) {#each vouches as vouch, i}
     function create_each_block$5(ctx) {
     	let tr;
     	let td0;
-    	let t0_value = /*vouch*/ ctx[3].note + "";
+    	let t0_value = /*i*/ ctx[5] + 1 + "";
     	let t0;
     	let t1;
     	let td1;
-    	let t2_value = /*vouch*/ ctx[3].address + "";
+    	let t2_value = /*vouch*/ ctx[3].note + "";
     	let t2;
     	let t3;
     	let td2;
+    	let t4_value = /*vouch*/ ctx[3].address + "";
     	let t4;
-    	let td3;
     	let t5;
+    	let td3;
+    	let t6;
+    	let td4;
+    	let t7;
     	let if_block0 = /*vouch*/ ctx[3].is_received && create_if_block_4$2(ctx);
 
     	function select_block_type_1(ctx, dirty) {
@@ -21331,16 +21467,20 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			td2 = element("td");
-    			if (if_block0) if_block0.c();
-    			t4 = space();
-    			td3 = element("td");
-    			if (if_block1) if_block1.c();
+    			t4 = text(t4_value);
     			t5 = space();
-    			add_location(td0, file$b, 52, 12, 1344);
-    			add_location(td1, file$b, 53, 12, 1378);
-    			add_location(td2, file$b, 54, 12, 1415);
-    			add_location(td3, file$b, 59, 12, 1584);
-    			add_location(tr, file$b, 51, 10, 1327);
+    			td3 = element("td");
+    			if (if_block0) if_block0.c();
+    			t6 = space();
+    			td4 = element("td");
+    			if (if_block1) if_block1.c();
+    			t7 = space();
+    			add_location(td0, file$b, 53, 12, 1368);
+    			add_location(td1, file$b, 54, 12, 1395);
+    			add_location(td2, file$b, 55, 12, 1429);
+    			add_location(td3, file$b, 56, 12, 1466);
+    			add_location(td4, file$b, 61, 12, 1635);
+    			add_location(tr, file$b, 52, 10, 1351);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -21351,21 +21491,24 @@ var app = (function () {
     			append_dev(td1, t2);
     			append_dev(tr, t3);
     			append_dev(tr, td2);
-    			if (if_block0) if_block0.m(td2, null);
-    			append_dev(tr, t4);
-    			append_dev(tr, td3);
-    			if (if_block1) if_block1.m(td3, null);
+    			append_dev(td2, t4);
     			append_dev(tr, t5);
+    			append_dev(tr, td3);
+    			if (if_block0) if_block0.m(td3, null);
+    			append_dev(tr, t6);
+    			append_dev(tr, td4);
+    			if (if_block1) if_block1.m(td4, null);
+    			append_dev(tr, t7);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*vouches*/ 1 && t0_value !== (t0_value = /*vouch*/ ctx[3].note + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*vouches*/ 1 && t2_value !== (t2_value = /*vouch*/ ctx[3].address + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*vouches*/ 1 && t2_value !== (t2_value = /*vouch*/ ctx[3].note + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*vouches*/ 1 && t4_value !== (t4_value = /*vouch*/ ctx[3].address + "")) set_data_dev(t4, t4_value);
 
     			if (/*vouch*/ ctx[3].is_received) {
     				if (if_block0) ; else {
     					if_block0 = create_if_block_4$2(ctx);
     					if_block0.c();
-    					if_block0.m(td2, null);
+    					if_block0.m(td3, null);
     				}
     			} else if (if_block0) {
     				if_block0.d(1);
@@ -21378,7 +21521,7 @@ var app = (function () {
 
     				if (if_block1) {
     					if_block1.c();
-    					if_block1.m(td3, null);
+    					if_block1.m(td4, null);
     				}
     			}
     		},
@@ -21396,7 +21539,7 @@ var app = (function () {
     		block,
     		id: create_each_block$5.name,
     		type: "each",
-    		source: "(51:8) {#each vouches as vouch}",
+    		source: "(52:8) {#each vouches as vouch, i}",
     		ctx
     	});
 
@@ -21728,42 +21871,42 @@ var app = (function () {
     			attr_dev(button, "class", "uk-modal-close-default");
     			attr_dev(button, "type", "button");
     			attr_dev(button, "uk-close", "");
-    			add_location(button, file$a, 45, 12, 1412);
+    			add_location(button, file$a, 45, 12, 1411);
     			attr_dev(h2, "class", "uk-modal-title uk-text-muted");
-    			add_location(h2, file$a, 46, 12, 1496);
-    			add_location(th0, file$a, 50, 24, 1667);
-    			add_location(th1, file$a, 51, 24, 1701);
-    			add_location(tr0, file$a, 49, 20, 1638);
-    			add_location(thead, file$a, 48, 16, 1610);
+    			add_location(h2, file$a, 46, 12, 1495);
+    			add_location(th0, file$a, 50, 24, 1666);
+    			add_location(th1, file$a, 51, 24, 1700);
+    			add_location(tr0, file$a, 49, 20, 1637);
+    			add_location(thead, file$a, 48, 16, 1609);
     			attr_dev(td0, "class", "uk-table-expand");
-    			add_location(td0, file$a, 56, 20, 1831);
-    			add_location(td1, file$a, 57, 20, 1900);
-    			add_location(tr1, file$a, 55, 20, 1806);
-    			add_location(td2, file$a, 60, 24, 2012);
+    			add_location(td0, file$a, 56, 20, 1830);
+    			add_location(td1, file$a, 57, 20, 1899);
+    			add_location(tr1, file$a, 55, 20, 1805);
+    			add_location(td2, file$a, 60, 24, 2011);
     			attr_dev(td3, "class", "uk-text-break");
-    			add_location(td3, file$a, 61, 24, 2070);
-    			add_location(tr2, file$a, 59, 20, 1983);
-    			add_location(td4, file$a, 64, 24, 2200);
-    			add_location(td5, file$a, 65, 24, 2259);
-    			add_location(tr3, file$a, 63, 20, 2171);
-    			add_location(td6, file$a, 68, 24, 2373);
-    			add_location(td7, file$a, 69, 24, 2435);
-    			add_location(tr4, file$a, 67, 20, 2344);
-    			add_location(td8, file$a, 72, 24, 2560);
-    			add_location(td9, file$a, 73, 24, 2610);
-    			add_location(tr5, file$a, 71, 20, 2531);
-    			add_location(td10, file$a, 76, 24, 2728);
-    			add_location(td11, file$a, 77, 24, 2791);
-    			add_location(tr6, file$a, 75, 20, 2699);
-    			add_location(td12, file$a, 80, 24, 2909);
-    			add_location(td13, file$a, 81, 24, 2961);
-    			add_location(tr7, file$a, 79, 20, 2880);
-    			add_location(tbody, file$a, 54, 16, 1778);
+    			add_location(td3, file$a, 61, 24, 2069);
+    			add_location(tr2, file$a, 59, 20, 1982);
+    			add_location(td4, file$a, 64, 24, 2199);
+    			add_location(td5, file$a, 65, 24, 2258);
+    			add_location(tr3, file$a, 63, 20, 2170);
+    			add_location(td6, file$a, 68, 24, 2372);
+    			add_location(td7, file$a, 69, 24, 2434);
+    			add_location(tr4, file$a, 67, 20, 2343);
+    			add_location(td8, file$a, 72, 24, 2559);
+    			add_location(td9, file$a, 73, 24, 2609);
+    			add_location(tr5, file$a, 71, 20, 2530);
+    			add_location(td10, file$a, 76, 24, 2727);
+    			add_location(td11, file$a, 77, 24, 2790);
+    			add_location(tr6, file$a, 75, 20, 2698);
+    			add_location(td12, file$a, 80, 24, 2908);
+    			add_location(td13, file$a, 81, 24, 2960);
+    			add_location(tr7, file$a, 79, 20, 2879);
+    			add_location(tbody, file$a, 54, 16, 1777);
     			attr_dev(table, "class", "uk-table");
-    			add_location(table, file$a, 47, 12, 1569);
+    			add_location(table, file$a, 47, 12, 1568);
     			attr_dev(div, "id", "validator-modal-body");
     			attr_dev(div, "class", "uk-modal-dialog uk-modal-body svelte-zc3fmg");
-    			add_location(div, file$a, 44, 8, 1330);
+    			add_location(div, file$a, 44, 8, 1329);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -21880,7 +22023,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			if (if_block) if_block.c();
-    			attr_dev(div, "id", "val-modal");
+    			attr_dev(div, "id", "valModal");
     			attr_dev(div, "uk-modal", "");
     			add_location(div, file$a, 42, 0, 1272);
     		},
@@ -22065,7 +22208,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (39:34) {#if !has_notes}
+    // (40:34) {#if !has_notes}
     function create_if_block_5$1(ctx) {
     	let addressnotetip;
     	let current;
@@ -22097,14 +22240,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$1.name,
     		type: "if",
-    		source: "(39:34) {#if !has_notes}",
+    		source: "(40:34) {#if !has_notes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (93:2) {:else}
+    // (94:2) {:else}
     function create_else_block_1$3(ctx) {
     	let network;
     	let current;
@@ -22145,14 +22288,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1$3.name,
     		type: "else",
-    		source: "(93:2) {:else}",
+    		source: "(94:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (47:2) {#if view == "Chain"}
+    // (48:2) {#if view == "Chain"}
     function create_if_block$5(ctx) {
     	let div;
     	let table;
@@ -22208,15 +22351,15 @@ var app = (function () {
     			}
 
     			attr_dev(th0, "class", "uk-text-center");
-    			add_location(th0, file$9, 55, 14, 1989);
-    			add_location(th1, file$9, 68, 14, 2580);
-    			add_location(tr, file$9, 51, 10, 1867);
-    			add_location(thead, file$9, 50, 8, 1849);
-    			add_location(tbody, file$9, 71, 8, 2631);
+    			add_location(th0, file$9, 56, 14, 2044);
+    			add_location(th1, file$9, 69, 14, 2635);
+    			add_location(tr, file$9, 52, 10, 1922);
+    			add_location(thead, file$9, 51, 8, 1904);
+    			add_location(tbody, file$9, 72, 8, 2686);
     			attr_dev(table, "class", "uk-table uk-table-hover uk-text-muted");
-    			add_location(table, file$9, 49, 6, 1787);
+    			add_location(table, file$9, 50, 6, 1842);
     			attr_dev(div, "class", "uk-overflow-auto");
-    			add_location(div, file$9, 48, 4, 1750);
+    			add_location(div, file$9, 49, 4, 1805);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -22315,14 +22458,14 @@ var app = (function () {
     		block,
     		id: create_if_block$5.name,
     		type: "if",
-    		source: "(47:2) {#if view == \\\"Chain\\\"}",
+    		source: "(48:2) {#if view == \\\"Chain\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (53:14) {#if has_notes}
+    // (54:14) {#if has_notes}
     function create_if_block_4$1(ctx) {
     	let th;
 
@@ -22331,7 +22474,7 @@ var app = (function () {
     			th = element("th");
     			th.textContent = "note";
     			attr_dev(th, "class", "uk-text-center");
-    			add_location(th, file$9, 53, 16, 1918);
+    			add_location(th, file$9, 54, 16, 1973);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
@@ -22345,14 +22488,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$1.name,
     		type: "if",
-    		source: "(53:14) {#if has_notes}",
+    		source: "(54:14) {#if has_notes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (60:18) {#if sortOption == col.sortKey}
+    // (61:18) {#if sortOption == col.sortKey}
     function create_if_block_2$3(ctx) {
     	let if_block_anchor;
 
@@ -22394,14 +22537,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$3.name,
     		type: "if",
-    		source: "(60:18) {#if sortOption == col.sortKey}",
+    		source: "(61:18) {#if sortOption == col.sortKey}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:20) {:else}
+    // (64:20) {:else}
     function create_else_block$3(ctx) {
     	let span;
 
@@ -22409,7 +22552,7 @@ var app = (function () {
     		c: function create() {
     			span = element("span");
     			attr_dev(span, "uk-icon", "icon: triangle-down");
-    			add_location(span, file$9, 63, 22, 2428);
+    			add_location(span, file$9, 64, 22, 2483);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -22423,14 +22566,14 @@ var app = (function () {
     		block,
     		id: create_else_block$3.name,
     		type: "else",
-    		source: "(63:20) {:else}",
+    		source: "(64:20) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:20) {#if sortOrder == 1}
+    // (62:20) {#if sortOrder == 1}
     function create_if_block_3$2(ctx) {
     	let span;
 
@@ -22438,7 +22581,7 @@ var app = (function () {
     		c: function create() {
     			span = element("span");
     			attr_dev(span, "uk-icon", "icon: triangle-up");
-    			add_location(span, file$9, 61, 22, 2336);
+    			add_location(span, file$9, 62, 22, 2391);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -22452,14 +22595,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$2.name,
     		type: "if",
-    		source: "(61:20) {#if sortOrder == 1}",
+    		source: "(62:20) {#if sortOrder == 1}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (57:14) {#each sortableColumns as col}
+    // (58:14) {#each sortableColumns as col}
     function create_each_block_1$2(ctx) {
     	let th;
     	let span;
@@ -22482,9 +22625,9 @@ var app = (function () {
     			t1 = space();
     			if (if_block) if_block.c();
     			attr_dev(span, "class", "disable-select");
-    			add_location(span, file$9, 58, 18, 2175);
+    			add_location(span, file$9, 59, 18, 2230);
     			attr_dev(th, "class", "uk-text-right");
-    			add_location(th, file$9, 57, 16, 2090);
+    			add_location(th, file$9, 58, 16, 2145);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, th, anchor);
@@ -22526,14 +22669,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1$2.name,
     		type: "each",
-    		source: "(57:14) {#each sortableColumns as col}",
+    		source: "(58:14) {#each sortableColumns as col}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (75:14) {#if has_notes}
+    // (76:14) {#if has_notes}
     function create_if_block_1$4(ctx) {
     	let td;
     	let t_value = /*val*/ ctx[12].note + "";
@@ -22544,7 +22687,7 @@ var app = (function () {
     			td = element("td");
     			t = text(t_value);
     			attr_dev(td, "class", "uk-text-center");
-    			add_location(td, file$9, 75, 16, 2844);
+    			add_location(td, file$9, 76, 16, 2899);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, td, anchor);
@@ -22562,14 +22705,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$4.name,
     		type: "if",
-    		source: "(75:14) {#if has_notes}",
+    		source: "(76:14) {#if has_notes}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (73:10) {#each set as val, i}
+    // (74:10) {#each set as val, i}
     function create_each_block$4(ctx) {
     	let tr;
     	let t0;
@@ -22643,29 +22786,29 @@ var app = (function () {
     			span = element("span");
     			t15 = space();
     			attr_dev(td0, "class", "uk-visible@s uk-text-center");
-    			add_location(td0, file$9, 77, 14, 2921);
+    			add_location(td0, file$9, 78, 14, 2976);
     			attr_dev(td1, "class", "uk-hidden@s uk-text-truncate");
-    			add_location(td1, file$9, 78, 14, 3002);
+    			add_location(td1, file$9, 79, 14, 3057);
     			attr_dev(td2, "class", "uk-text-right");
-    			add_location(td2, file$9, 79, 14, 3084);
+    			add_location(td2, file$9, 80, 14, 3139);
     			attr_dev(td3, "class", "uk-text-right");
-    			add_location(td3, file$9, 80, 14, 3148);
+    			add_location(td3, file$9, 81, 14, 3203);
     			attr_dev(td4, "class", "uk-text-right");
-    			add_location(td4, file$9, 81, 14, 3221);
+    			add_location(td4, file$9, 82, 14, 3276);
     			attr_dev(td5, "class", "uk-text-right");
-    			add_location(td5, file$9, 82, 14, 3285);
+    			add_location(td5, file$9, 83, 14, 3340);
     			attr_dev(td6, "class", "uk-text-right");
-    			add_location(td6, file$9, 83, 14, 3356);
+    			add_location(td6, file$9, 84, 14, 3411);
     			attr_dev(span, "uk-icon", "icon: info");
-    			attr_dev(span, "uk-toggle", "target: #val-modal");
-    			add_location(span, file$9, 85, 16, 3448);
-    			add_location(td7, file$9, 84, 14, 3427);
+    			attr_dev(span, "uk-toggle", "target: #valModal");
+    			add_location(span, file$9, 86, 16, 3503);
+    			add_location(td7, file$9, 85, 14, 3482);
 
     			attr_dev(tr, "class", tr_class_value = "" + (null_to_empty(/*val*/ ctx[12].account_address === /*data*/ ctx[0].account_view.address
     			? 'owner'
     			: '') + " svelte-n6q91t"));
 
-    			add_location(tr, file$9, 73, 12, 2683);
+    			add_location(tr, file$9, 74, 12, 2738);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, tr, anchor);
@@ -22743,7 +22886,7 @@ var app = (function () {
     		block,
     		id: create_each_block$4.name,
     		type: "each",
-    		source: "(73:10) {#each set as val, i}",
+    		source: "(74:10) {#each set as val, i}",
     		ctx
     	});
 
@@ -22752,28 +22895,37 @@ var app = (function () {
 
     function create_fragment$9(ctx) {
     	let main;
+    	let validatormodal;
+    	let t0;
     	let h2;
     	let span;
-    	let t0_value = /*set*/ ctx[1].length + "";
-    	let t0;
+    	let t1_value = /*set*/ ctx[1].length + "";
     	let t1;
     	let t2;
+    	let t3;
     	let div;
     	let label0;
     	let input0;
-    	let t3;
     	let t4;
+    	let t5;
     	let label1;
     	let input1;
-    	let t5;
     	let t6;
+    	let t7;
     	let current_block_type_index;
     	let if_block1;
-    	let t7;
-    	let validatormodal;
     	let current;
     	let mounted;
     	let dispose;
+
+    	validatormodal = new ValidatorModal({
+    			props: {
+    				validator: /*selectedVal*/ ctx[5],
+    				set: /*set*/ ctx[1]
+    			},
+    			$$inline: true
+    		});
+
     	let if_block0 = !/*has_notes*/ ctx[6] && create_if_block_5$1(ctx);
     	const if_block_creators = [create_if_block$5, create_else_block_1$3];
     	const if_blocks = [];
@@ -22786,55 +22938,47 @@ var app = (function () {
     	current_block_type_index = select_block_type(ctx);
     	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
-    	validatormodal = new ValidatorModal({
-    			props: {
-    				validator: /*selectedVal*/ ctx[5],
-    				set: /*set*/ ctx[1]
-    			},
-    			$$inline: true
-    		});
-
     	const block = {
     		c: function create() {
     			main = element("main");
+    			create_component(validatormodal.$$.fragment);
+    			t0 = space();
     			h2 = element("h2");
     			span = element("span");
-    			t0 = text(t0_value);
-    			t1 = text(" Validators ");
+    			t1 = text(t1_value);
+    			t2 = text(" Validators ");
     			if (if_block0) if_block0.c();
-    			t2 = space();
+    			t3 = space();
     			div = element("div");
     			label0 = element("label");
     			input0 = element("input");
-    			t3 = text(" Chain");
-    			t4 = space();
+    			t4 = text(" Chain");
+    			t5 = space();
     			label1 = element("label");
     			input1 = element("input");
-    			t5 = text(" Network");
-    			t6 = space();
-    			if_block1.c();
+    			t6 = text(" Network");
     			t7 = space();
-    			create_component(validatormodal.$$.fragment);
-    			add_location(span, file$9, 38, 4, 1229);
+    			if_block1.c();
+    			add_location(span, file$9, 39, 4, 1284);
     			attr_dev(h2, "class", "uk-text-center uk-text-uppercase uk-text-muted uk-text-light uk-margin-medium-bottom");
-    			add_location(h2, file$9, 37, 2, 1127);
+    			add_location(h2, file$9, 38, 2, 1182);
     			attr_dev(input0, "class", "uk-radio");
     			attr_dev(input0, "type", "radio");
     			attr_dev(input0, "name", "radio2");
     			input0.value = "Chain";
     			input0.checked = true;
-    			add_location(input0, file$9, 42, 11, 1526);
-    			add_location(label0, file$9, 42, 4, 1519);
+    			add_location(input0, file$9, 43, 11, 1581);
+    			add_location(label0, file$9, 43, 4, 1574);
     			attr_dev(input1, "class", "uk-radio");
     			attr_dev(input1, "type", "radio");
     			attr_dev(input1, "name", "radio2");
     			input1.value = "Network";
-    			add_location(input1, file$9, 43, 11, 1625);
-    			add_location(label1, file$9, 43, 4, 1618);
+    			add_location(input1, file$9, 44, 11, 1680);
+    			add_location(label1, file$9, 44, 4, 1673);
     			attr_dev(div, "id", "radio2");
     			attr_dev(div, "class", "uk-margin uk-grid-small uk-child-width-auto uk-align-center uk-text-center");
     			attr_dev(div, "uk-grid", "");
-    			add_location(div, file$9, 41, 2, 1317);
+    			add_location(div, file$9, 42, 2, 1372);
     			attr_dev(main, "uk-height-viewport", "expand: true");
     			add_location(main, file$9, 36, 0, 1084);
     		},
@@ -22843,24 +22987,24 @@ var app = (function () {
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
+    			mount_component(validatormodal, main, null);
+    			append_dev(main, t0);
     			append_dev(main, h2);
     			append_dev(h2, span);
-    			append_dev(span, t0);
     			append_dev(span, t1);
+    			append_dev(span, t2);
     			if (if_block0) if_block0.m(span, null);
-    			append_dev(main, t2);
+    			append_dev(main, t3);
     			append_dev(main, div);
     			append_dev(div, label0);
     			append_dev(label0, input0);
-    			append_dev(label0, t3);
-    			append_dev(div, t4);
+    			append_dev(label0, t4);
+    			append_dev(div, t5);
     			append_dev(div, label1);
     			append_dev(label1, input1);
-    			append_dev(label1, t5);
-    			append_dev(main, t6);
-    			if_blocks[current_block_type_index].m(main, null);
+    			append_dev(label1, t6);
     			append_dev(main, t7);
-    			mount_component(validatormodal, main, null);
+    			if_blocks[current_block_type_index].m(main, null);
     			current = true;
 
     			if (!mounted) {
@@ -22869,7 +23013,11 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if ((!current || dirty & /*set*/ 2) && t0_value !== (t0_value = /*set*/ ctx[1].length + "")) set_data_dev(t0, t0_value);
+    			const validatormodal_changes = {};
+    			if (dirty & /*selectedVal*/ 32) validatormodal_changes.validator = /*selectedVal*/ ctx[5];
+    			if (dirty & /*set*/ 2) validatormodal_changes.set = /*set*/ ctx[1];
+    			validatormodal.$set(validatormodal_changes);
+    			if ((!current || dirty & /*set*/ 2) && t1_value !== (t1_value = /*set*/ ctx[1].length + "")) set_data_dev(t1, t1_value);
 
     			if (!/*has_notes*/ ctx[6]) {
     				if (if_block0) {
@@ -22915,32 +23063,27 @@ var app = (function () {
     				}
 
     				transition_in(if_block1, 1);
-    				if_block1.m(main, t7);
+    				if_block1.m(main, null);
     			}
-
-    			const validatormodal_changes = {};
-    			if (dirty & /*selectedVal*/ 32) validatormodal_changes.validator = /*selectedVal*/ ctx[5];
-    			if (dirty & /*set*/ 2) validatormodal_changes.set = /*set*/ ctx[1];
-    			validatormodal.$set(validatormodal_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
+    			transition_in(validatormodal.$$.fragment, local);
     			transition_in(if_block0);
     			transition_in(if_block1);
-    			transition_in(validatormodal.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
+    			transition_out(validatormodal.$$.fragment, local);
     			transition_out(if_block0);
     			transition_out(if_block1);
-    			transition_out(validatormodal.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
+    			destroy_component(validatormodal);
     			if (if_block0) if_block0.d();
     			if_blocks[current_block_type_index].d();
-    			destroy_component(validatormodal);
     			mounted = false;
     			dispose();
     		}
@@ -31361,11 +31504,11 @@ var app = (function () {
     			br = element("br");
     			t2 = space();
     			if (if_block) if_block.c();
-    			add_location(strong, file$3, 324, 6, 8384);
-    			add_location(br, file$3, 325, 6, 8452);
+    			add_location(strong, file$3, 324, 6, 8386);
+    			add_location(br, file$3, 325, 6, 8454);
     			attr_dev(breadcrumb, "id", "nodeDetails");
     			attr_dev(breadcrumb, "class", "svelte-qeiutm");
-    			add_location(breadcrumb, file$3, 323, 4, 8348);
+    			add_location(breadcrumb, file$3, 323, 4, 8350);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, breadcrumb, anchor);
@@ -31494,7 +31637,7 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			br = element("br");
-    			add_location(br, file$3, 330, 10, 8606);
+    			add_location(br, file$3, 330, 10, 8608);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t0, anchor);
@@ -31544,9 +31687,9 @@ var app = (function () {
     			attr_dev(canvas_1, "width", "1024px");
     			attr_dev(canvas_1, "height", "840px");
     			attr_dev(canvas_1, "class", "svelte-qeiutm");
-    			add_location(canvas_1, file$3, 335, 2, 8669);
+    			add_location(canvas_1, file$3, 335, 2, 8671);
     			attr_dev(div, "class", "my_container svelte-qeiutm");
-    			add_location(div, file$3, 321, 0, 8279);
+    			add_location(div, file$3, 321, 0, 8281);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -31943,7 +32086,11 @@ var app = (function () {
 
     		if ($$self.$$.dirty[0] & /*graph, max*/ 72) {
     			nodes = graph.nodes.map(d => {
-    				d.size = Math.pow(graph.links.filter(link => link.source == d.id || link.target == d.id).map(link => link.value).reduce((a, b) => a + b), 2);
+    				d.size = Math.pow(
+    					graph.links.filter(link => link.source == d.id || link.target == d.id).map(link => link.value).reduce((a, b) => {
+    					}),
+    					2
+    				);
 
     				if (d.id == "You") {
     					$$invalidate(6, max = d.size);

@@ -45,6 +45,7 @@
     <table class="uk-table">
       <thead>
         <tr>
+          <th>#</th>
           <th>note</th>
           <th>validator</th>
           <th>received</th>
@@ -52,8 +53,9 @@
         </tr>
       </thead>
       <tbody>
-        {#each vouches as vouch}
+        {#each vouches as vouch, i}
           <tr>
+            <td>{i+1}</td>
             <td>{vouch.note}</td>
             <td>{vouch.address}</td>
             <td>

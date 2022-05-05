@@ -9,7 +9,7 @@ use diem_types::{
 };
 use ol_types::{
     autopay::AutoPayView,
-    vouch::{VouchView, AccountVouchedView},
+    vouch::VouchView,
     validator_config::ValidatorConfigView
 };
 
@@ -100,6 +100,8 @@ pub struct ValidatorView {
     pub vouch: Option<VouchView>,
     /// note
     pub note: String,
+    /// has grafana setup
+    pub has_grafana: Option<bool>,
 }
 
 /// Validators config stats
@@ -189,7 +191,7 @@ impl Node {
             let dict = self.load_account_dictionary();
 
             // Fetch and format all data for each Validator
-            let mut validators: Vec<ValidatorView> = validator_set
+            let validators: Vec<ValidatorView> = validator_set
                 .payload()
                 .iter()
                 .filter_map(|v| self.format_validator_info(v, &dict, &validators_stats).ok())
@@ -287,6 +289,7 @@ impl Node {
             autopay: autopay,
             vouch: Some(vouch),
             note: dict.get_note_for_address(*v.account_address()),
+            has_grafana: dict.get_has_grafana_for_address(*v.account_address())
         })
     }
 

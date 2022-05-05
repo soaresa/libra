@@ -40,7 +40,7 @@
 </style>
 
 
-<div id="val-modal" uk-modal>
+<div id="valModal" uk-modal>
     {#if validator}
         <div id="validator-modal-body" class="uk-modal-dialog uk-modal-body">
             <button class="uk-modal-close-default" type="button" uk-close></button>

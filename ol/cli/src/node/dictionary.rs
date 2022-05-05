@@ -19,6 +19,8 @@ pub struct AccountDictionaryEntry {
   pub address: AccountAddress,
   ///
   pub note: String,
+  ///
+  pub has_grafana: Option<bool>
 }
 
 impl Node {
@@ -43,6 +45,14 @@ impl AccountDictionary {
         match self.accounts.iter().find(| entry | entry.address == address) {
             Some(found) => found.note.clone(),
             None => String::from("")
+        }
+    }
+
+    /// return has grafana for the account address
+    pub fn get_has_grafana_for_address(&self, address: AccountAddress) -> Option<bool> {
+        match self.accounts.iter().find(| entry | entry.address == address) {
+            Some(found) => found.has_grafana.clone(),
+            None => None
         }
     }
 }
